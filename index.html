@@ -35,8 +35,8 @@
         }
         
         #hover-area {
-            width: 200px;
-            height: 100px;
+            width: 100px;
+            height: 50px;
             background-color: #d6eaf8;
             border-radius: 8px;
             display: flex;
@@ -213,7 +213,7 @@
     <div class="section">
         <h2 class="section-title">1. Mouse Hover</h2>
         <p class="instruction">Move your mouse over the blue area below:</p>
-        <div id="hover-area">Hover over me</div>
+        <div id="hover-area">Catch me!</div>
         <div id="hover-feedback" class="feedback"></div>
     </div>
     
@@ -228,21 +228,21 @@
     <div class="section">
         <h2 class="section-title">3. Right Click</h2>
         <p class="instruction">Right-click on the orange area below:</p>
-        <div id="right-click-area">Right-click me</div>
+        <div id="right-click-area">Right-click</div>
         <div id="right-click-feedback" class="feedback"></div>
     </div>
     
     <div class="section">
         <h2 class="section-title">4. Double Click</h2>
         <p class="instruction">Double-click on the purple box below:</p>
-        <div id="double-click-box">Double-click me</div>
+        <div id="double-click-box">Double-click</div>
         <div class="feedback">Double-clicks: <span id="double-click-counter" class="counter">0</span></div>
         <button id="reset-double-clicks">Reset Count</button>
     </div>
     
     <div class="section">
         <h2 class="section-title">5. Scrolling</h2>
-        <p class="instruction">Scroll inside this container:</p>
+        <p class="instruction">Scroll inside this container: Find the Target in the correct order. Ex. Target 1, Target 2, Target 3</p>
         <div id="scroll-container">
             <div id="scroll-content">Scroll up and down in this area</div>
         </div>
@@ -268,6 +268,13 @@
         <div id="selection-feedback" class="feedback"></div>
     </div>
 
+    <div class="section">
+        <h2 class="section-title">8. Dragon Drop</h2>
+        <p class="instruction">Drag the dragons to their nest</p>
+        <div id="dragondrop">
+        </div>
+    </div>
+
     <script>
         // 1. Mouse Hover
         const hoverArea = document.getElementById('hover-area');
@@ -288,138 +295,528 @@ hoverLevelDisplay.textContent = `Level: ${hoverLevel}`;
 hoverLevelDisplay.style.marginTop = '10px';
 hoverArea.parentNode.insertBefore(hoverLevelDisplay, hoverFeedback);
 
-hoverArea.addEventListener('mouseenter', () => {
+hoverArea.addEventListener('mouseenter', (event) => {
     hoverFeedback.textContent = 'Mouse is hovering over the area!';
     
-    // Move the box to a random position after a brief delay
+    // Get mouse position relative to parent container
+    const parentRect = hoverArea.parentElement.getBoundingClientRect();
+    const mouseX = event.clientX - parentRect.left;
+    const mouseY = event.clientY - parentRect.top;
+    
+    // Move the box away from the mouse after a brief delay
     setTimeout(() => {
         const parentWidth = hoverArea.parentElement.offsetWidth - hoverArea.offsetWidth;
         const parentHeight = 150; // Limited height to keep within section
         
-        const randomX = Math.floor(Math.random() * parentWidth);
-        const randomY = Math.floor(Math.random() * parentHeight);
+        // Determine the direction to move away from mouse
+        let newX, newY;
         
+        // If mouse is on left side, move right; if on right side, move left
+        if (mouseX < parentWidth / 2) {
+            newX = mouseX + Math.random() * (parentWidth - mouseX - hoverArea.offsetWidth);
+        } else {
+            newX = Math.random() * (mouseX - hoverArea.offsetWidth);
+        }
+        
+        // If mouse is on top half, move down; if on bottom half, move up
+        if (mouseY < parentHeight / 2) {
+            newY = mouseY + Math.random() * (parentHeight - mouseY);
+        } else {
+            newY = Math.random() * (mouseY - hoverArea.offsetHeight);
+        }
+        
+        // Ensure the box stays within bounds
+        newX = Math.max(0, Math.min(newX, parentWidth));
+        newY = Math.max(0, Math.min(newY, parentHeight));
+        
+        // Apply the new position
         hoverArea.style.position = 'relative';
-        hoverArea.style.left = `${randomX}px`;
-        hoverArea.style.top = `${randomY}px`;
+        hoverArea.style.left = `${newX}px`;
+        hoverArea.style.top = `${newY}px`;
         
+        // Update level
         hoverLevel++;
         hoverLevelDisplay.textContent = `Level: ${hoverLevel}`;
     }, 500);
 });
-        
         // 2. Left Click
-        const clickBox = document.getElementById('click-box');
-        const clickCounter = document.getElementById('click-counter');
-        const resetClicks = document.getElementById('reset-clicks');
-        let clickCount = 0;
+const clickBox = document.getElementById('click-box');
+const clickCounter = document.getElementById('click-counter');
+const resetClicks = document.getElementById('reset-clicks');
+let clickCount = 0;
+
+// Create container for the click box with relative positioning
+const clickBoxContainer = document.createElement('div');
+clickBoxContainer.style.position = 'relative';
+clickBoxContainer.style.height = '200px';
+clickBoxContainer.style.border = '1px dashed #ccc';
+clickBoxContainer.style.marginBottom = '10px';
+
+// Replace the click box with the container
+clickBox.parentNode.insertBefore(clickBoxContainer, clickBox);
+clickBoxContainer.appendChild(clickBox);
+
+// Style the click box for absolute positioning
+clickBox.style.position = 'absolute';
+clickBox.style.cursor = 'pointer';
+
+// Add level tracking
+let clickLevel = 1;
+const clickLevelDisplay = document.createElement('div');
+clickLevelDisplay.textContent = `Level: ${clickLevel}`;
+clickLevelDisplay.style.marginBottom = '5px';
+clickBox.parentNode.insertBefore(clickLevelDisplay, clickBox);
+
+clickBox.addEventListener('click', () => {
+    clickCount++;
+    clickCounter.textContent = clickCount;
+    
+    // Move to random position
+    moveElementToRandomPosition(clickBox, clickBoxContainer);
+    
+    // Increase level every 5 clicks
+    if (clickCount % 5 === 0) {
+        clickLevel++;
+        clickLevelDisplay.textContent = `Level: ${clickLevel}`;
         
-        clickBox.addEventListener('click', () => {
-            clickCount++;
-            clickCounter.textContent = clickCount;
-        });
+        // Make the box smaller as level increases
+        const newSize = Math.max(30, 100 - (clickLevel * 5));
+        clickBox.style.width = `${newSize}px`;
+        clickBox.style.height = `${newSize}px`;
+    }
+});
+
+resetClicks.addEventListener('click', () => {
+    clickCount = 0;
+    clickCounter.textContent = clickCount;
+    clickLevel = 1;
+    clickLevelDisplay.textContent = `Level: ${clickLevel}`;
+    clickBox.style.width = '100px';
+    clickBox.style.height = '100px';
+    moveElementToRandomPosition(clickBox, clickBoxContainer);
+});
+
+// Initial positioning
+moveElementToRandomPosition(clickBox, clickBoxContainer);
+
+// 3. Right Click
+const rightClickArea = document.getElementById('right-click-area');
+const rightClickFeedback = document.getElementById('right-click-feedback');
+
+// Create container for the right-click area
+const rightClickContainer = document.createElement('div');
+rightClickContainer.style.position = 'relative';
+rightClickContainer.style.height = '200px';
+rightClickContainer.style.border = '1px dashed #ccc';
+rightClickContainer.style.marginBottom = '10px';
+
+// Replace the right-click area with the container
+rightClickArea.parentNode.insertBefore(rightClickContainer, rightClickArea);
+rightClickContainer.appendChild(rightClickArea);
+
+// Style the right-click area for absolute positioning
+rightClickArea.style.position = 'absolute';
+rightClickArea.style.cursor = 'context-menu';
+
+// Add level tracking for right clicks
+let rightClickCount = 0;
+let rightClickLevel = 1;
+const rightClickLevelDisplay = document.createElement('div');
+rightClickLevelDisplay.textContent = `Level: ${rightClickLevel}`;
+rightClickLevelDisplay.style.marginBottom = '5px';
+rightClickArea.parentNode.insertBefore(rightClickLevelDisplay, rightClickArea);
+
+rightClickArea.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    rightClickCount++;
+    rightClickFeedback.textContent = `You right-clicked! (${rightClickCount})`;
+    rightClickFeedback.className = 'feedback success-message';
+    
+    // Move to random position
+    moveElementToRandomPosition(rightClickArea, rightClickContainer);
+    
+    // Increase level every 3 right-clicks
+    if (rightClickCount % 3 === 0) {
+        rightClickLevel++;
+        rightClickLevelDisplay.textContent = `Level: ${rightClickLevel}`;
         
-        resetClicks.addEventListener('click', () => {
-            clickCount = 0;
-            clickCounter.textContent = clickCount;
-        });
+        // Make the area smaller as level increases
+        const newSize = Math.max(40, 100 - (rightClickLevel * 5));
+        rightClickArea.style.width = `${newSize}px`;
+        rightClickArea.style.height = `${newSize}px`;
+    }
+    
+    setTimeout(() => {
+        rightClickFeedback.textContent = '';
+        rightClickFeedback.className = 'feedback';
+    }, 2000);
+});
+
+// Add reset for right clicks
+const resetRightClicks = document.createElement('button');
+resetRightClicks.textContent = 'Reset Right Clicks';
+resetRightClicks.addEventListener('click', () => {
+    rightClickCount = 0;
+    rightClickLevel = 1;
+    rightClickLevelDisplay.textContent = `Level: ${rightClickLevel}`;
+    rightClickArea.style.width = '100px';
+    rightClickArea.style.height = '100px';
+    rightClickFeedback.textContent = '';
+    rightClickFeedback.className = 'feedback';
+    moveElementToRandomPosition(rightClickArea, rightClickContainer);
+});
+rightClickFeedback.parentNode.insertBefore(resetRightClicks, rightClickFeedback.nextSibling);
+
+// Initial positioning
+moveElementToRandomPosition(rightClickArea, rightClickContainer);
+
+// 4. Double Click
+const doubleClickBox = document.getElementById('double-click-box');
+const doubleClickCounter = document.getElementById('double-click-counter');
+const resetDoubleClicks = document.getElementById('reset-double-clicks');
+let doubleClickCount = 0;
+
+// Create container for the double-click box
+const doubleClickContainer = document.createElement('div');
+doubleClickContainer.style.position = 'relative';
+doubleClickContainer.style.height = '200px';
+doubleClickContainer.style.border = '1px dashed #ccc';
+doubleClickContainer.style.marginBottom = '10px';
+
+// Replace the double-click box with the container
+doubleClickBox.parentNode.insertBefore(doubleClickContainer, doubleClickBox);
+doubleClickContainer.appendChild(doubleClickBox);
+
+// Style the double-click box for absolute positioning
+doubleClickBox.style.position = 'absolute';
+doubleClickBox.style.cursor = 'pointer';
+
+// Add level tracking for double clicks
+let doubleClickLevel = 1;
+const doubleClickLevelDisplay = document.createElement('div');
+doubleClickLevelDisplay.textContent = `Level: ${doubleClickLevel}`;
+doubleClickLevelDisplay.style.marginBottom = '5px';
+doubleClickBox.parentNode.insertBefore(doubleClickLevelDisplay, doubleClickBox);
+
+doubleClickBox.addEventListener('dblclick', () => {
+    doubleClickCount++;
+    doubleClickCounter.textContent = doubleClickCount;
+    
+    // Move to random position
+    moveElementToRandomPosition(doubleClickBox, doubleClickContainer);
+    
+    // Increase level every 3 double-clicks
+    if (doubleClickCount % 3 === 0) {
+        doubleClickLevel++;
+        doubleClickLevelDisplay.textContent = `Level: ${doubleClickLevel}`;
         
-        // 3. Right Click
-        const rightClickArea = document.getElementById('right-click-area');
-        const rightClickFeedback = document.getElementById('right-click-feedback');
+        // Make the box smaller as level increases
+        const newSize = Math.max(40, 100 - (doubleClickLevel * 5));
+        doubleClickBox.style.width = `${newSize}px`;
+        doubleClickBox.style.height = `${newSize}px`;
+    }
+});
+
+resetDoubleClicks.addEventListener('click', () => {
+    doubleClickCount = 0;
+    doubleClickCounter.textContent = doubleClickCount;
+    doubleClickLevel = 1;
+    doubleClickLevelDisplay.textContent = `Level: ${doubleClickLevel}`;
+    doubleClickBox.style.width = '100px';
+    doubleClickBox.style.height = '100px';
+    moveElementToRandomPosition(doubleClickBox, doubleClickContainer);
+});
+
+// Initial positioning
+moveElementToRandomPosition(doubleClickBox, doubleClickContainer);
+
+// Shared function to move elements to random positions
+function moveElementToRandomPosition(element, container) {
+    const containerWidth = container.offsetWidth - element.offsetWidth;
+    const containerHeight = container.offsetHeight - element.offsetHeight;
+    
+    const randomX = Math.floor(Math.random() * containerWidth);
+    const randomY = Math.floor(Math.random() * containerHeight);
+    
+    element.style.left = `${randomX}px`;
+    element.style.top = `${randomY}px`;
+}
         
-        rightClickArea.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            rightClickFeedback.textContent = 'You right-clicked!';
-            rightClickFeedback.className = 'feedback success-message';
-            
-            setTimeout(() => {
-                rightClickFeedback.textContent = '';
-                rightClickFeedback.className = 'feedback';
-            }, 2000);
-        });
+// 5. Scrolling - Enhanced Version
+const scrollContainer = document.getElementById('scroll-container');
+const scrollCounter = document.getElementById('scroll-counter');
+const resetScrolls = document.getElementById('reset-scrolls');
+let scrollCount = 0;
+let scrollDistance = 0;
+let lastScrollTop = 0;
+let scrollLevel = 1;
+let targetsHit = 0;
+let currentTarget = null;
+
+// Create a scroll stats display
+const scrollStatsDisplay = document.createElement('div');
+scrollStatsDisplay.style.display = 'flex';
+scrollStatsDisplay.style.justifyContent = 'space-between';
+scrollStatsDisplay.style.marginBottom = '10px';
+scrollStatsDisplay.innerHTML = `
+    <div>Level: <span id="scroll-level">1</span></div>
+    <div>Scrolls: <span id="scroll-count">0</span></div>
+    <div>Distance: <span id="scroll-distance">0</span>px</div>
+    <div>Targets: <span id="targets-hit">0</span>/<span id="total-targets">0</span></div>
+`;
+
+// Insert stats display before the scroll container
+scrollContainer.parentNode.insertBefore(scrollStatsDisplay, scrollContainer);
+
+// Update display elements
+const scrollLevelDisplay = document.getElementById('scroll-level');
+const scrollCountDisplay = document.getElementById('scroll-count');
+const scrollDistanceDisplay = document.getElementById('scroll-distance');
+const targetsHitDisplay = document.getElementById('targets-hit');
+const totalTargetsDisplay = document.getElementById('total-targets');
+
+// Enhance scroll container style
+scrollContainer.style.position = 'relative';
+scrollContainer.style.height = '300px';
+scrollContainer.style.overflow = 'auto';
+scrollContainer.style.border = '1px solid #ccc';
+scrollContainer.style.padding = '10px';
+scrollContainer.style.backgroundColor = '#f9f9f9';
+
+// Generate content with random heights to make scrolling interesting
+function generateScrollContent() {
+    scrollContainer.innerHTML = '';
+    const targetCount = 3 + Math.min(scrollLevel, 7); // More targets at higher levels
+    totalTargetsDisplay.textContent = targetCount;
+    
+    // Create a long content div
+    const contentHeight = 1200 + (scrollLevel * 200); // Increases with level
+    const content = document.createElement('div');
+    content.style.height = `${contentHeight}px`;
+    content.style.position = 'relative';
+    
+    // Add some visual elements at random positions
+    for (let i = 0; i < 20; i++) {
+        const element = document.createElement('div');
+        element.style.position = 'absolute';
+        element.style.width = '80%';
+        element.style.height = '40px';
+        element.style.backgroundColor = '#e1e1e1';
+        element.style.left = '10%';
+        element.style.top = `${Math.floor(Math.random() * (contentHeight - 50))}px`;
+        element.style.borderRadius = '4px';
+        content.appendChild(element);
+    }
+    
+    // Add scroll targets at specific positions
+    const targetPositions = [];
+    for (let i = 0; i < targetCount; i++) {
+        let position;
+        do {
+            position = Math.floor(Math.random() * (contentHeight - 100));
+        } while (targetPositions.some(pos => Math.abs(pos - position) < 100));
         
-        // 4. Double Click
-        const doubleClickBox = document.getElementById('double-click-box');
-        const doubleClickCounter = document.getElementById('double-click-counter');
-        const resetDoubleClicks = document.getElementById('reset-double-clicks');
-        let doubleClickCount = 0;
+        targetPositions.push(position);
         
-        doubleClickBox.addEventListener('dblclick', () => {
-            doubleClickCount++;
-            doubleClickCounter.textContent = doubleClickCount;
-        });
+        const target = document.createElement('div');
+        target.className = 'scroll-target';
+        target.dataset.id = i;
+        target.style.position = 'absolute';
+        target.style.width = '90%';
+        target.style.height = '60px';
+        target.style.backgroundColor = '#ffcc00';
+        target.style.left = '5%';
+        target.style.top = `${position}px`;
+        target.style.borderRadius = '4px';
+        target.style.display = 'flex';
+        target.style.justifyContent = 'center';
+        target.style.alignItems = 'center';
+        target.style.fontWeight = 'bold';
+        target.style.border = '2px dashed #cc9900';
+        target.textContent = `Target ${i + 1}`;
+        content.appendChild(target);
+    }
+    
+    scrollContainer.appendChild(content);
+    
+    // Set the first target as active
+    activateNextTarget();
+}
+
+// Activate the next target to scroll to
+function activateNextTarget() {
+    const targets = document.querySelectorAll('.scroll-target:not(.hit)');
+    if (targets.length === 0) {
+        // All targets hit - level complete!
+        showLevelCompleteMessage();
+        return;
+    }
+    
+    // Select the next unhit target
+    currentTarget = targets[0];
+    document.querySelectorAll('.scroll-target').forEach(t => t.style.backgroundColor = '#ffcc00');
+    currentTarget.style.backgroundColor = '#4caf50';
+    currentTarget.style.border = '2px solid #2e7d32';
+    currentTarget.textContent = `→ Target ${parseInt(currentTarget.dataset.id) + 1} ←`;
+}
+
+// Check if a target is in the viewport
+function isElementInViewport(el) {
+    const rect = el.getBoundingClientRect();
+    const containerRect = scrollContainer.getBoundingClientRect();
+    
+    return (
+        rect.top >= containerRect.top &&
+        rect.left >= containerRect.left &&
+        rect.bottom <= containerRect.bottom &&
+        rect.right <= containerRect.right
+    );
+}
+
+// Show level complete message
+function showLevelCompleteMessage() {
+    const message = document.createElement('div');
+    message.style.position = 'absolute';
+    message.style.top = '50%';
+    message.style.left = '50%';
+    message.style.transform = 'translate(-50%, -50%)';
+    message.style.backgroundColor = 'rgba(76, 175, 80, 0.9)';
+    message.style.color = 'white';
+    message.style.padding = '20px';
+    message.style.borderRadius = '8px';
+    message.style.fontWeight = 'bold';
+    message.style.textAlign = 'center';
+    message.style.zIndex = '100';
+    message.innerHTML = `
+        <h3>Level ${scrollLevel} Complete!</h3>
+        <p>All targets found!</p>
+        <p>Total scrolls: ${scrollCount}</p>
+        <p>Scroll distance: ${scrollDistance}px</p>
+    `;
+    
+    scrollContainer.appendChild(message);
+    
+    // Set timeout to advance to the next level
+    setTimeout(() => {
+        scrollLevel++;
+        scrollLevelDisplay.textContent = scrollLevel;
+        targetsHit = 0;
+        targetsHitDisplay.textContent = targetsHit;
+        scrollContainer.scrollTop = 0;
+        generateScrollContent();
+    }, 3000);
+}
+
+// Enhanced scroll event handler
+scrollContainer.addEventListener('scroll', () => {
+    // Count scrolls
+    scrollCount++;
+    scrollCountDisplay.textContent = scrollCount;
+    
+    // Track distance scrolled (absolute value of change)
+    const newScrollTop = scrollContainer.scrollTop;
+    scrollDistance += Math.abs(newScrollTop - lastScrollTop);
+    scrollDistanceDisplay.textContent = Math.round(scrollDistance);
+    lastScrollTop = newScrollTop;
+    
+    // Check if current target is in viewport
+    if (currentTarget && isElementInViewport(currentTarget)) {
+        currentTarget.classList.add('hit');
+        currentTarget.style.backgroundColor = '#9e9e9e';
+        currentTarget.style.border = '2px solid #757575';
+        currentTarget.textContent = `✓ Target ${parseInt(currentTarget.dataset.id) + 1}`;
         
-        resetDoubleClicks.addEventListener('click', () => {
-            doubleClickCount = 0;
-            doubleClickCounter.textContent = doubleClickCount;
-        });
+        // Update targets hit counter
+        targetsHit++;
+        targetsHitDisplay.textContent = targetsHit;
         
-        // 5. Scrolling
-        const scrollContainer = document.getElementById('scroll-container');
-        const scrollCounter = document.getElementById('scroll-counter');
-        const resetScrolls = document.getElementById('reset-scrolls');
-        let scrollCount = 0;
+        // Show brief feedback
+        const feedback = document.createElement('div');
+        feedback.style.position = 'absolute';
+        feedback.style.top = '10px';
+        feedback.style.left = '50%';
+        feedback.style.transform = 'translateX(-50%)';
+        feedback.style.backgroundColor = 'rgba(76, 175, 80, 0.8)';
+        feedback.style.color = 'white';
+        feedback.style.padding = '8px 15px';
+        feedback.style.borderRadius = '20px';
+        feedback.style.fontWeight = 'bold';
+        feedback.textContent = `Target found! ${targetsHit}/${totalTargetsDisplay.textContent}`;
+        feedback.style.zIndex = '100';
         
-        scrollContainer.addEventListener('scroll', () => {
-            scrollCount++;
-            scrollCounter.textContent = scrollCount;
-        });
+        scrollContainer.appendChild(feedback);
+        setTimeout(() => scrollContainer.removeChild(feedback), 1500);
         
-        resetScrolls.addEventListener('click', () => {
-            scrollCount = 0;
-            scrollCounter.textContent = scrollCount;
-        });
+        // Activate next target
+        setTimeout(activateNextTarget, 500);
+    }
+});
+
+// Enhanced reset function
+resetScrolls.addEventListener('click', () => {
+    scrollCount = 0;
+    scrollDistance = 0;
+    scrollLevel = 1;
+    targetsHit = 0;
+    lastScrollTop = 0;
+    
+    // Update displays
+    scrollCountDisplay.textContent = scrollCount;
+    scrollDistanceDisplay.textContent = scrollDistance;
+    scrollLevelDisplay.textContent = scrollLevel;
+    targetsHitDisplay.textContent = targetsHit;
+    
+    // Reset scroll position
+    scrollContainer.scrollTop = 0;
+    
+    // Generate new content
+    generateScrollContent();
+});
+
+// Add difficulty selector
+const difficultyContainer = document.createElement('div');
+difficultyContainer.style.marginTop = '10px';
+difficultyContainer.innerHTML = `
+    <label>Difficulty: 
+        <select id="scroll-difficulty">
+            <option value="easy">Easy</option>
+            <option value="medium" selected>Medium</option>
+            <option value="hard">Hard</option>
+        </select>
+    </label>
+`;
+
+scrollContainer.parentNode.appendChild(difficultyContainer);
+
+// Handle difficulty changes
+document.getElementById('scroll-difficulty').addEventListener('change', function() {
+    switch (this.value) {
+        case 'easy':
+            scrollLevel = 1;
+            break;
+        case 'medium':
+            scrollLevel = 3;
+            break;
+        case 'hard':
+            scrollLevel = 6;
+            break;
+    }
+    
+    // Reset and update
+    resetScrolls.click();
+});
+
+// Initialize the scroll practice
+generateScrollContent();
         
         // 6. Drag and Drop
-        const draggable = document.querySelector('.draggable');
-        const dropZone = document.getElementById('drop-zone');
-        const dragDropFeedback = document.getElementById('drag-drop-feedback');
-        const resetDrag = document.getElementById('reset-drag');
-        
-        draggable.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('text/plain', 'dragged');
-            setTimeout(() => {
-                draggable.style.visibility = 'hidden';
-            }, 0);
-        });
-        
-        dropZone.addEventListener('dragenter', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('highlight');
-        });
-        
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-        });
-        
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.classList.remove('highlight');
-        });
-        
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('highlight');
-            dropZone.classList.add('success');
-            dropZone.textContent = 'Item dropped successfully!';
-            dragDropFeedback.textContent = 'Great job! You successfully completed the drag and drop.';
-            dragDropFeedback.className = 'feedback success-message';
-        });
-        
-        resetDrag.addEventListener('click', () => {
-            draggable.style.visibility = 'visible';
-            dropZone.classList.remove('success');
-            dropZone.textContent = 'Drop here';
-            dragDropFeedback.textContent = '';
-            dragDropFeedback.className = 'feedback';
-        });
-        // First, update your HTML structure by replacing the single draggable with:
+// First, update your HTML structure by replacing the single draggable with:
 const dragSection = document.querySelector('.draggable').parentElement;
 dragSection.removeChild(document.querySelector('.draggable'));
 
 // Create multiple draggable items
-const colors = ['#f9e79f', '#aed6f1', '#f5b7b1', '#d7bde2'];
-const labels = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
+const colors = ['#f9e79f', '#aed6f1', '#f5b7b1', '#d7bde2', '#7dcea0', '#f0b27a', '#85c1e9', '#f1948a', '#bb8fce'];
+const labels = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8', 'Item 9'];
 
 const dragItemsContainer = document.createElement('div');
 dragItemsContainer.style.display = 'flex';
@@ -436,6 +833,27 @@ const dragLevelDisplay = document.createElement('div');
 dragLevelDisplay.textContent = `Level: ${dragLevel}`;
 dragLevelDisplay.style.marginBottom = '10px';
 dragSection.insertBefore(dragLevelDisplay, dragItemsContainer);
+
+// Make drop zone smaller
+const dropZone = document.getElementById('drop-zone');
+dropZone.style.width = '80px';
+dropZone.style.height = '80px';
+dropZone.style.position = 'absolute';
+
+// Create a container for the drop zone
+const dropZoneContainer = document.createElement('div');
+dropZoneContainer.style.position = 'relative';
+dropZoneContainer.style.height = '250px';
+dropZoneContainer.style.border = '1px dashed #ccc';
+dropZoneContainer.style.marginTop = '20px';
+dropZoneContainer.style.width = '100%';
+
+// Replace the drop zone with the container
+dropZone.parentNode.replaceChild(dropZoneContainer, dropZone);
+dropZoneContainer.appendChild(dropZone);
+
+// Move drop zone to initial random position
+moveDropZoneToRandomPosition();
 
 // Create the items
 for (let i = 0; i < colors.length; i++) {
@@ -456,6 +874,24 @@ for (let i = 0; i < colors.length; i++) {
     });
 }
 
+// Get references to feedback and reset elements
+const dragDropFeedback = document.getElementById('drag-drop-feedback');
+const resetDrag = document.getElementById('reset-drag');
+
+// Add event listeners to drop zone
+dropZone.addEventListener('dragenter', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('highlight');
+});
+
+dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+});
+
+dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('highlight');
+});
+
 // Update drop handler
 let itemsDropped = 0;
 dropZone.addEventListener('drop', (e) => {
@@ -472,8 +908,11 @@ dropZone.addEventListener('drop', (e) => {
     dragDropFeedback.textContent = `Great job! You've dropped ${itemsDropped} of ${colors.length} items.`;
     dragDropFeedback.className = 'feedback success-message';
     
+    // Move drop zone to a new random position after each successful drop
+    moveDropZoneToRandomPosition();
+    
     if (itemsDropped === colors.length) {
-        dropZone.textContent = 'All items dropped successfully!';
+        dropZone.textContent = 'All items dropped!';
         dragLevel++;
         dragLevelDisplay.textContent = `Level: ${dragLevel}`;
         
@@ -482,11 +921,15 @@ dropZone.addEventListener('drop', (e) => {
             resetDragState();
         }, 2000);
     } else {
-        dropZone.textContent = `${itemsDropped} of ${colors.length} dropped!`;
+        dropZone.textContent = `${itemsDropped}/${colors.length}`;
     }
 });
 
 // Update reset function
+resetDrag.addEventListener('click', () => {
+    resetDragState();
+});
+
 function resetDragState() {
     const allDraggables = document.querySelectorAll('.draggable');
     allDraggables.forEach(item => {
@@ -498,26 +941,25 @@ function resetDragState() {
     dropZone.textContent = 'Drop here';
     dragDropFeedback.textContent = '';
     dragDropFeedback.className = 'feedback';
+    
+    // Move drop zone to a new random position
+    moveDropZoneToRandomPosition();
 }
 
-resetDrag.addEventListener('click', resetDragState);
-        // 7. Text Selection
-        const selectionTarget = document.getElementById('selection-target');
-        const selectionFeedback = document.getElementById('selection-feedback');
-        
-        document.addEventListener('selectionchange', () => {
-            const selection = window.getSelection();
-            if (selection.toString() === selectionTarget.textContent) {
-                selectionFeedback.textContent = 'You selected the correct text!';
-                selectionFeedback.className = 'feedback success-message';
-            } else if (selection.toString() && selection.toString().length > 0) {
-                selectionFeedback.textContent = 'Not quite. Try selecting exactly "this specific phrase".';
-                selectionFeedback.className = 'feedback';
-            } else {
-                selectionFeedback.textContent = '';
-            }
-        });
-        // Array of phrases for text selection practice
+// Function to move drop zone to a random position
+function moveDropZoneToRandomPosition() {
+    const containerWidth = dropZoneContainer.offsetWidth - dropZone.offsetWidth;
+    const containerHeight = dropZoneContainer.offsetHeight - dropZone.offsetHeight;
+    
+    const randomX = Math.floor(Math.random() * containerWidth);
+    const randomY = Math.floor(Math.random() * containerHeight);
+    
+    dropZone.style.left = `${randomX}px`;
+    dropZone.style.top = `${randomY}px`;
+}
+
+
+// Array of phrases for text selection practice - expanded with more variety
 const phrases = [
     "this specific phrase",
     "the highlighted text",
@@ -526,86 +968,820 @@ const phrases = [
     "this particular section",
     "these exact words",
     "this crucial part",
-    "the key sentence"
+    "the key sentence",
+    "your digital literacy",
+    "mouse selection skills",
+    "precision is important",
+    "accuracy matters most",
+    "focus on the details",
+    "this text fragment",
+    "careful cursor control",
+    "exact text boundaries",
+    "these three words",
+    "fine motor skills",
+    "user interface mastery",
+    "digital dexterity test"
 ];
 
 let currentPhraseIndex = 0;
 let textSelectionLevel = 1;
+let timeToSelect = 0;
+let startTime = null;
+let difficultyFactor = 1;
+let consecutiveSuccesses = 0;
 
-// Add level display
+// Add level display and score tracking
+const selectionStatsContainer = document.createElement('div');
+selectionStatsContainer.style.display = 'flex';
+selectionStatsContainer.style.justifyContent = 'space-between';
+selectionStatsContainer.style.marginBottom = '15px';
+
 const selectionLevelDisplay = document.createElement('div');
 selectionLevelDisplay.textContent = `Level: ${textSelectionLevel}`;
-selectionLevelDisplay.style.marginTop = '10px';
+
+const selectionTimerDisplay = document.createElement('div');
+selectionTimerDisplay.textContent = `Time: 0.0s`;
+
+const selectionScoreDisplay = document.createElement('div');
+selectionScoreDisplay.textContent = `Score: 0`;
+let selectionScore = 0;
+
+selectionStatsContainer.appendChild(selectionLevelDisplay);
+selectionStatsContainer.appendChild(selectionTimerDisplay);
+selectionStatsContainer.appendChild(selectionScoreDisplay);
+
 document.getElementById('text-selection-area').parentNode.insertBefore(
-    selectionLevelDisplay, 
-    document.getElementById('selection-feedback')
+    selectionStatsContainer, 
+    document.getElementById('text-selection-area')
 );
 
-// Function to set a new phrase
+// Function to set a new phrase with increasing difficulty
 function setNewPhraseToSelect() {
-    currentPhraseIndex = (currentPhraseIndex + 1) % phrases.length;
-    const textArea = document.getElementById('text-selection-area');
-    const targetText = phrases[currentPhraseIndex];
+    // Clear any existing selection
+    window.getSelection().removeAllRanges();
     
-    // Generate a random sentence structure
+    // Shuffle phrases for more randomness when we've gone through them all
+    if (currentPhraseIndex === 0) {
+        shuffleArray(phrases);
+    }
+    
+    const targetText = phrases[currentPhraseIndex];
+    currentPhraseIndex = (currentPhraseIndex + 1) % phrases.length;
+    
+    const textArea = document.getElementById('text-selection-area');
+    
+    // Sentence parts with varying complexity
     const sentenceParts = [
         "This is a paragraph with some text. Try to select ",
         "Please read this paragraph carefully and select ",
         "In this exercise, you need to highlight ",
         "Look at this text and try to select ",
-        "Read the following text and identify "
+        "Read the following text and identify ",
+        "For this challenging selection task, find ",
+        "Among the words in this paragraph, locate ",
+        "As part of this mouse practice, identify and select "
+    ];
+    
+    const middleParts = [
+        " which appears ",
+        " that you can find ",
+        " located ",
+        " positioned ",
+        " that is hidden ",
+        " carefully placed "
+    ];
+    
+    const positionParts = [
+        "here in this text",
+        "within these words",
+        "in this paragraph",
+        "among these characters",
+        "in this sentence"
     ];
     
     const endParts = [
-        " with your mouse.",
+        " with precision.",
         " to practice selection.",
         " to complete this task.",
         " as accurately as possible.",
-        " to demonstrate your selection skills."
+        " to demonstrate your selection skills.",
+        " using your mouse carefully.",
+        " with perfect timing."
     ];
     
-    const randomStart = sentenceParts[Math.floor(Math.random() * sentenceParts.length)];
-    const randomEnd = endParts[Math.floor(Math.random() * endParts.length)];
+    // Generate paragraph with increasing difficulty
+    let paragraph = "";
     
-    textArea.innerHTML = `${randomStart}<span id="selection-target">${targetText}</span>${randomEnd}`;
+    // At higher levels, make text longer and more complex
+    if (textSelectionLevel > 5) {
+        // Create a more complex paragraph with multiple sentences
+        const randomWords = ["digital", "mouse", "cursor", "selection", "text", "practice", "skills", 
+                           "computer", "interface", "highlight", "precision", "accuracy", "focus", 
+                           "exercise", "learning", "interactive", "challenge", "performance"];
+        
+        // Add some random text before
+        for (let i = 0; i < Math.min(textSelectionLevel, 10); i++) {
+            paragraph += randomWords[Math.floor(Math.random() * randomWords.length)] + " ";
+        }
+        
+        // Add main instruction
+        const randomStart = sentenceParts[Math.floor(Math.random() * sentenceParts.length)];
+        const randomMiddle = middleParts[Math.floor(Math.random() * middleParts.length)];
+        const randomPosition = positionParts[Math.floor(Math.random() * positionParts.length)];
+        const randomEnd = endParts[Math.floor(Math.random() * endParts.length)];
+        
+        paragraph += randomStart + "<span id='selection-target'>" + targetText + "</span>" + 
+                   randomMiddle + randomPosition + randomEnd + " ";
+        
+        // Add some random text after
+        for (let i = 0; i < Math.min(textSelectionLevel, 12); i++) {
+            paragraph += randomWords[Math.floor(Math.random() * randomWords.length)] + " ";
+        }
+    } else {
+        // Simpler paragraph for earlier levels
+        const randomStart = sentenceParts[Math.floor(Math.random() * sentenceParts.length)];
+        const randomEnd = endParts[Math.floor(Math.random() * endParts.length)];
+        
+        paragraph = randomStart + "<span id='selection-target'>" + targetText + "</span>" + randomEnd;
+    }
+    
+    textArea.innerHTML = paragraph;
+    
+    // Start timing when new phrase is set
+    startTime = new Date();
+    
+    // Update timer display
+    updateTimer();
 }
 
-// Update the selection change handler
+// Function to update timer
+function updateTimer() {
+    if (startTime) {
+        const currentTime = new Date();
+        timeToSelect = (currentTime - startTime) / 1000;
+        selectionTimerDisplay.textContent = `Time: ${timeToSelect.toFixed(1)}s`;
+        
+        // Continue updating timer
+        requestAnimationFrame(updateTimer);
+    }
+}
+
+// Shuffle array function (Fisher-Yates algorithm)
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+// Update the selection change handler with timing and scoring
 document.addEventListener('selectionchange', () => {
     const selection = window.getSelection();
     const selectionTarget = document.getElementById('selection-target');
+    const selectionFeedback = document.getElementById('selection-feedback');
+    
+    if (!selectionTarget) return;
     
     if (selection.toString() === selectionTarget.textContent) {
-        selectionFeedback.textContent = 'You selected the correct text!';
+        // Calculate score based on speed and level
+        const baseScore = Math.max(10, 50 - Math.floor(timeToSelect * 2));
+        const levelBonus = textSelectionLevel * 5;
+        const pointsEarned = baseScore + levelBonus;
+        
+        selectionScore += pointsEarned;
+        selectionScoreDisplay.textContent = `Score: ${selectionScore}`;
+        
+        // Update feedback
+        selectionFeedback.textContent = `Perfect! +${pointsEarned} points (${baseScore} speed + ${levelBonus} level bonus)`;
         selectionFeedback.className = 'feedback success-message';
+        
+        // Track consecutive successes for difficulty adjustment
+        consecutiveSuccesses++;
         
         // Move to next phrase after a brief delay
         setTimeout(() => {
-            textSelectionLevel++;
-            selectionLevelDisplay.textContent = `Level: ${textSelectionLevel}`;
+            // Increase level every 3 successful selections
+            if (consecutiveSuccesses >= 3) {
+                textSelectionLevel++;
+                selectionLevelDisplay.textContent = `Level: ${textSelectionLevel}`;
+                consecutiveSuccesses = 0;
+                
+                // Increase difficulty factor
+                difficultyFactor = 1 + (textSelectionLevel * 0.1);
+            }
+            
             setNewPhraseToSelect();
             selectionFeedback.textContent = '';
         }, 1500);
     } else if (selection.toString() && selection.toString().length > 0) {
-        selectionFeedback.textContent = `Not quite. Try selecting exactly "${selectionTarget.textContent}".`;
+        // Calculate how far off the selection is
+        const targetText = selectionTarget.textContent;
+        const selectedText = selection.toString();
+        
+        // Simple feedback based on selection length comparison
+        if (selectedText.length < targetText.length) {
+            selectionFeedback.textContent = `Not enough text selected. Try selecting exactly "${selectionTarget.textContent}".`;
+        } else if (selectedText.length > targetText.length) {
+            selectionFeedback.textContent = `Too much text selected. Try selecting exactly "${selectionTarget.textContent}".`;
+        } else {
+            selectionFeedback.textContent = `Close, but not exact. Try selecting exactly "${selectionTarget.textContent}".`;
+        }
+        
         selectionFeedback.className = 'feedback';
+        
+        // Reset consecutive successes when there's a mistake
+        consecutiveSuccesses = 0;
     } else {
         selectionFeedback.textContent = '';
     }
 });
 
-// Add a reset button for the text selection
+// Add a reset button for the text selection with improved styling
 const resetTextSelection = document.createElement('button');
-resetTextSelection.textContent = 'Reset Text';
+resetTextSelection.textContent = 'Reset Practice';
+resetTextSelection.style.marginTop = '15px';
+resetTextSelection.style.padding = '8px 16px';
+resetTextSelection.style.backgroundColor = '#4a90e2';
+resetTextSelection.style.color = 'white';
+resetTextSelection.style.border = 'none';
+resetTextSelection.style.borderRadius = '4px';
+resetTextSelection.style.cursor = 'pointer';
+
 resetTextSelection.addEventListener('click', () => {
     textSelectionLevel = 1;
     selectionLevelDisplay.textContent = `Level: ${textSelectionLevel}`;
+    selectionScore = 0;
+    selectionScoreDisplay.textContent = `Score: ${selectionScore}`;
+    consecutiveSuccesses = 0;
+    difficultyFactor = 1;
     currentPhraseIndex = 0;
+    shuffleArray(phrases);
     setNewPhraseToSelect();
-    selectionFeedback.textContent = '';
+    document.getElementById('selection-feedback').textContent = '';
 });
 
-document.getElementById('text-selection-area').parentNode.appendChild(resetTextSelection);
+// Add a challenge mode button
+const challengeButton = document.createElement('button');
+challengeButton.textContent = 'Challenge Mode';
+challengeButton.style.marginTop = '15px';
+challengeButton.style.marginLeft = '10px';
+challengeButton.style.padding = '8px 16px';
+challengeButton.style.backgroundColor = '#e74c3c';
+challengeButton.style.color = 'white';
+challengeButton.style.border = 'none';
+challengeButton.style.borderRadius = '4px';
+challengeButton.style.cursor = 'pointer';
+
+challengeButton.addEventListener('click', () => {
+    textSelectionLevel = 10;
+    selectionLevelDisplay.textContent = `Level: ${textSelectionLevel}`;
+    difficultyFactor = 2;
+    document.getElementById('selection-feedback').textContent = 'Challenge mode activated! Good luck!';
+    document.getElementById('selection-feedback').className = 'feedback';
+    setNewPhraseToSelect();
+});
+
+// Create button container
+const buttonContainer = document.createElement('div');
+buttonContainer.style.display = 'flex';
+buttonContainer.appendChild(resetTextSelection);
+buttonContainer.appendChild(challengeButton);
+
+document.getElementById('text-selection-area').parentNode.appendChild(buttonContainer);
+
+// Initialize
+shuffleArray(phrases);
+setNewPhraseToSelect();
+
+// DragonDrop Game - Dragon-themed drag and drop game for mouse practice
+
+// Set up game container
+const gameContainer = document.createElement('div');
+gameContainer.id = 'dragon-drop-game';
+gameContainer.style.fontFamily = 'Arial, sans-serif';
+gameContainer.style.width = '100%';
+gameContainer.style.maxWidth = '800px';
+gameContainer.style.margin = '0 auto';
+gameContainer.style.padding = '20px';
+gameContainer.style.boxSizing = 'border-box';
+gameContainer.style.userSelect = 'none'; // Prevent text selection
+
+// Add game title
+const gameTitle = document.createElement('h2');
+gameTitle.textContent = '🐉 DragonDrop';
+gameTitle.style.textAlign = 'center';
+gameTitle.style.color = '#8b5cf6';
+gameTitle.style.marginBottom = '20px';
+gameContainer.appendChild(gameTitle);
+
+// Create game info section
+const gameInfo = document.createElement('div');
+gameInfo.style.display = 'flex';
+gameInfo.style.justifyContent = 'space-between';
+gameInfo.style.marginBottom = '20px';
+gameContainer.appendChild(gameInfo);
+
+// Score display
+const scoreDisplay = document.createElement('div');
+scoreDisplay.innerHTML = '<strong>Score:</strong> <span id="game-score">0</span>';
+scoreDisplay.style.fontSize = '18px';
+gameInfo.appendChild(scoreDisplay);
+
+// Level display
+const levelDisplay = document.createElement('div');
+levelDisplay.innerHTML = '<strong>Level:</strong> <span id="game-level">1</span>';
+levelDisplay.style.fontSize = '18px';
+gameInfo.appendChild(levelDisplay);
+
+// Timer display
+const timerDisplay = document.createElement('div');
+timerDisplay.innerHTML = '<strong>Time:</strong> <span id="game-timer">60</span>s';
+timerDisplay.style.fontSize = '18px';
+gameInfo.appendChild(timerDisplay);
+
+// Create game area
+const gameArea = document.createElement('div');
+gameArea.style.position = 'relative';
+gameArea.style.display = 'flex';
+gameArea.style.flexDirection = 'column';
+gameArea.style.gap = '20px';
+gameArea.style.height = '500px';
+gameArea.style.backgroundColor = '#f3f4f6';
+gameArea.style.borderRadius = '8px';
+gameArea.style.padding = '20px';
+gameContainer.appendChild(gameArea);
+
+// Create dragon staging area (where dragons start)
+const dragonStaging = document.createElement('div');
+dragonStaging.style.display = 'flex';
+dragonStaging.style.flexWrap = 'wrap';
+dragonStaging.style.gap = '15px';
+dragonStaging.style.alignItems = 'center';
+dragonStaging.style.justifyContent = 'center';
+dragonStaging.style.minHeight = '100px';
+dragonStaging.style.padding = '10px';
+dragonStaging.style.backgroundColor = '#e5e7eb';
+dragonStaging.style.borderRadius = '8px';
+gameArea.appendChild(dragonStaging);
+
+// Create nests area (drop zones)
+const nestsArea = document.createElement('div');
+nestsArea.style.flex = '1';
+nestsArea.style.display = 'flex';
+nestsArea.style.flexWrap = 'wrap';
+nestsArea.style.gap = '20px';
+nestsArea.style.alignItems = 'center';
+nestsArea.style.justifyContent = 'center';
+nestsArea.style.padding = '10px';
+gameArea.appendChild(nestsArea);
+
+// Create controls
+const controls = document.createElement('div');
+controls.style.display = 'flex';
+controls.style.justifyContent = 'center';
+controls.style.gap = '15px';
+controls.style.marginTop = '20px';
+gameContainer.appendChild(controls);
+
+// Start button
+const startButton = document.createElement('button');
+startButton.textContent = 'Start Game';
+startButton.style.padding = '10px 20px';
+startButton.style.backgroundColor = '#8b5cf6';
+startButton.style.color = 'white';
+startButton.style.border = 'none';
+startButton.style.borderRadius = '5px';
+startButton.style.cursor = 'pointer';
+controls.appendChild(startButton);
+
+// Reset button
+const resetButton = document.createElement('button');
+resetButton.textContent = 'Reset Game';
+resetButton.style.padding = '10px 20px';
+resetButton.style.backgroundColor = '#9ca3af';
+resetButton.style.color = 'white';
+resetButton.style.border = 'none';
+resetButton.style.borderRadius = '5px';
+resetButton.style.cursor = 'pointer';
+controls.appendChild(resetButton);
+
+const targetDiv = document.getElementById('dragondrop'); // Replace 'myDiv' with your actual div ID
+targetDiv.appendChild(gameContainer);
+
+// Game variables
+let score = 0;
+let level = 1;
+let timer = 60;
+let gameInterval;
+let dragonsInPlay = 0;
+let matchesNeeded = 3;
+let dragonsMatched = 0;
+let gameActive = false;
+
+// Dragon types with colors
+const dragonTypes = [
+    { type: 'fire', emoji: '🔥', color: '#ef4444' },
+    { type: 'water', emoji: '💧', color: '#3b82f6' },
+    { type: 'earth', emoji: '🌿', color: '#10b981' },
+    { type: 'air', emoji: '💨', color: '#d1d5db' },
+    { type: 'lightning', emoji: '⚡', color: '#fbbf24' }
+];
+
+// Function to create a dragon element
+function createDragon(dragonType) {
+    const dragon = document.createElement('div');
+    dragon.className = 'dragon';
+    dragon.dataset.type = dragonType.type;
+    dragon.draggable = true;
+    dragon.style.width = '60px';
+    dragon.style.height = '60px';
+    dragon.style.backgroundColor = dragonType.color;
+    dragon.style.borderRadius = '50%';
+    dragon.style.display = 'flex';
+    dragon.style.alignItems = 'center';
+    dragon.style.justifyContent = 'center';
+    dragon.style.fontSize = '24px';
+    dragon.style.cursor = 'grab';
+    dragon.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
+    dragon.style.transform = 'scale(1)';
+    dragon.style.transition = 'transform 0.2s, box-shadow 0.2s';
+    
+    // Dragon face
+    const dragonFace = document.createElement('div');
+    dragonFace.innerHTML = `${dragonType.emoji}<div style="font-size:10px;">dragon</div>`;
+    dragonFace.style.textAlign = 'center';
+    dragon.appendChild(dragonFace);
+    
+    // Drag events
+    dragon.addEventListener('dragstart', function(e) {
+        this.style.opacity = '0.5';
+        // Store dragon type in dataTransfer
+        e.dataTransfer.setData('text/plain', this.dataset.type);
+        // Set a custom drag image (optional)
+        const dragImg = new Image();
+        dragImg.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><circle cx="30" cy="30" r="30" fill="' + dragonType.color + '"/></svg>';
+        e.dataTransfer.setDragImage(dragImg, 30, 30);
+    });
+    
+    dragon.addEventListener('dragend', function() {
+        this.style.opacity = '1';
+    });
+    
+    // Visual feedback on hover
+    dragon.addEventListener('mouseenter', function() {
+        this.style.transform = 'scale(1.1)';
+        this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
+    });
+    
+    dragon.addEventListener('mouseleave', function() {
+        this.style.transform = 'scale(1)';
+        this.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
+    });
+    
+    return dragon;
+}
+
+// Function to create a nest (drop zone)
+function createNest(dragonType) {
+    const nest = document.createElement('div');
+    nest.className = 'nest';
+    nest.dataset.type = dragonType.type;
+    nest.style.width = '100px';
+    nest.style.height = '100px';
+    nest.style.borderRadius = '50%';
+    nest.style.backgroundColor = '#f3f4f6';
+    nest.style.border = `3px dashed ${dragonType.color}`;
+    nest.style.display = 'flex';
+    nest.style.flexDirection = 'column';
+    nest.style.alignItems = 'center';
+    nest.style.justifyContent = 'center';
+    nest.style.position = 'relative';
+    
+    // Nest label
+    const nestLabel = document.createElement('div');
+    nestLabel.innerHTML = `${dragonType.emoji}<div>${dragonType.type} nest</div>`;
+    nestLabel.style.fontSize = '12px';
+    nestLabel.style.textAlign = 'center';
+    nestLabel.style.color = '#6b7280';
+    nest.appendChild(nestLabel);
+    
+    // Highlight on hover
+    nest.addEventListener('mouseenter', function() {
+        if (!this.classList.contains('filled')) {
+            this.style.backgroundColor = '#e5e7eb';
+        }
+    });
+    
+    nest.addEventListener('mouseleave', function() {
+        if (!this.classList.contains('filled')) {
+            this.style.backgroundColor = '#f3f4f6';
+        }
+    });
+    
+    // Drop events
+    nest.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!this.classList.contains('filled')) {
+            this.style.backgroundColor = '#e5e7eb';
+            this.style.borderStyle = 'solid';
+        }
+    });
+    
+    nest.addEventListener('dragleave', function() {
+        if (!this.classList.contains('filled')) {
+            this.style.backgroundColor = '#f3f4f6';
+            this.style.borderStyle = 'dashed';
+        }
+    });
+    
+    nest.addEventListener('drop', function(e) {
+        e.preventDefault();
+        
+        if (this.classList.contains('filled')) {
+            return; // Nest already has a dragon
+        }
+        
+        const dragonType = e.dataTransfer.getData('text/plain');
+        
+        // Check if the dragon matches the nest
+        if (dragonType === this.dataset.type) {
+            this.style.backgroundColor = '#d1fae5'; // Success color
+            this.style.borderStyle = 'solid';
+            this.classList.add('filled');
+            
+            // Create success indicator
+            const successIndicator = document.createElement('div');
+            successIndicator.textContent = '✓';
+            successIndicator.style.position = 'absolute';
+            successIndicator.style.top = '5px';
+            successIndicator.style.right = '5px';
+            successIndicator.style.backgroundColor = '#10b981';
+            successIndicator.style.color = 'white';
+            successIndicator.style.width = '20px';
+            successIndicator.style.height = '20px';
+            successIndicator.style.borderRadius = '50%';
+            successIndicator.style.display = 'flex';
+            successIndicator.style.alignItems = 'center';
+            successIndicator.style.justifyContent = 'center';
+            this.appendChild(successIndicator);
+            
+            // Remove the dragon from the staging area
+            const draggedDragon = document.querySelector(`.dragon[data-type="${dragonType}"]`);
+            if (draggedDragon) {
+                dragonStaging.removeChild(draggedDragon);
+            }
+            
+            // Update score and matched count
+            score += 10 * level;
+            document.getElementById('game-score').textContent = score;
+            dragonsMatched++;
+            
+            // Create a mini-dragon in the nest
+            const miniDragon = document.createElement('div');
+            miniDragon.style.width = '40px';
+            miniDragon.style.height = '40px';
+            miniDragon.style.backgroundColor = dragonTypes.find(d => d.type === dragonType).color;
+            miniDragon.style.borderRadius = '50%';
+            miniDragon.style.display = 'flex';
+            miniDragon.style.alignItems = 'center';
+            miniDragon.style.justifyContent = 'center';
+            miniDragon.style.fontSize = '20px';
+            miniDragon.innerHTML = dragonTypes.find(d => d.type === dragonType).emoji;
+            miniDragon.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
+            miniDragon.style.marginTop = '5px';
+            this.appendChild(miniDragon);
+            
+            // Check if level is complete
+            if (dragonsMatched >= matchesNeeded) {
+                levelUp();
+            }
+        } else {
+            // Wrong match feedback
+            this.style.backgroundColor = '#fee2e2'; // Error color
+            setTimeout(() => {
+                this.style.backgroundColor = '#f3f4f6';
+                this.style.borderStyle = 'dashed';
+            }, 500);
+            
+            // Penalty
+            score = Math.max(0, score - 5);
+            document.getElementById('game-score').textContent = score;
+        }
+    });
+    
+    return nest;
+}
+
+// Function to start the game
+function startGame() {
+    if (gameActive) return;
+    
+    gameActive = true;
+    score = 0;
+    level = 1;
+    timer = 60;
+    dragonsMatched = 0;
+    
+    // Update display
+    document.getElementById('game-score').textContent = score;
+    document.getElementById('game-level').textContent = level;
+    document.getElementById('game-timer').textContent = timer;
+    
+    // Clear areas
+    dragonStaging.innerHTML = '';
+    nestsArea.innerHTML = '';
+    
+    // Set up level
+    setupLevel();
+    
+    // Start timer
+    gameInterval = setInterval(() => {
+        timer--;
+        document.getElementById('game-timer').textContent = timer;
+        
+        if (timer <= 0) {
+            endGame();
+        }
+    }, 1000);
+    
+    startButton.disabled = true;
+    startButton.style.backgroundColor = '#9ca3af';
+}
+
+// Function to set up a level
+function setupLevel() {
+    // Clear existing dragons and nests
+    dragonStaging.innerHTML = '';
+    nestsArea.innerHTML = '';
+    
+    // Determine number of dragon types for this level
+    const typesForLevel = Math.min(dragonTypes.length, 2 + Math.floor(level / 2));
+    
+    // Select random dragon types for this level
+    const shuffledTypes = [...dragonTypes].sort(() => 0.5 - Math.random());
+    const selectedTypes = shuffledTypes.slice(0, typesForLevel);
+    
+    // Create nests (drop zones)
+    selectedTypes.forEach(dragonType => {
+        const nest = createNest(dragonType);
+        nestsArea.appendChild(nest);
+    });
+    
+    // Determine how many dragons to create
+    matchesNeeded = selectedTypes.length;
+    
+    // Create dragons
+    selectedTypes.forEach(dragonType => {
+        const dragon = createDragon(dragonType);
+        dragonStaging.appendChild(dragon);
+    });
+    
+    // Position elements
+    positionNestsRandomly();
+}
+
+// Function to position nests randomly
+function positionNestsRandomly() {
+    const nests = nestsArea.querySelectorAll('.nest');
+    
+    nests.forEach(nest => {
+        // Make position absolute for random positioning
+        nest.style.position = 'absolute';
+        const maxX = nestsArea.offsetWidth - nest.offsetWidth;
+        const maxY = nestsArea.offsetHeight - nest.offsetHeight;
+        
+        let randomX, randomY;
+        let validPosition = false;
+        
+        // Try to find a position that doesn't overlap with other nests
+        let attempts = 0;
+        while (!validPosition && attempts < 50) {
+            attempts++;
+            randomX = Math.max(0, Math.floor(Math.random() * maxX));
+            randomY = Math.max(0, Math.floor(Math.random() * maxY));
+            
+            validPosition = true;
+            
+            // Check for overlap with other positioned nests
+            nestsArea.querySelectorAll('.nest').forEach(otherNest => {
+                if (otherNest !== nest && otherNest.style.left) {
+                    const otherX = parseInt(otherNest.style.left);
+                    const otherY = parseInt(otherNest.style.top);
+                    
+                    // Calculate distance between centers
+                    const dx = (randomX + nest.offsetWidth/2) - (otherX + otherNest.offsetWidth/2);
+                    const dy = (randomY + nest.offsetHeight/2) - (otherY + otherNest.offsetHeight/2);
+                    const distance = Math.sqrt(dx*dx + dy*dy);
+                    
+                    // If too close, try again
+                    if (distance < 120) {
+                        validPosition = false;
+                    }
+                }
+            });
+        }
+        
+        nest.style.left = `${randomX}px`;
+        nest.style.top = `${randomY}px`;
+    });
+}
+
+// Function to level up
+function levelUp() {
+    level++;
+    document.getElementById('game-level').textContent = level;
+    dragonsMatched = 0;
+    
+    // Add bonus time
+    timer += 10;
+    document.getElementById('game-timer').textContent = timer;
+    
+    // Show level up message
+    const levelUpMsg = document.createElement('div');
+    levelUpMsg.textContent = `Level ${level}!`;
+    levelUpMsg.style.position = 'absolute';
+    levelUpMsg.style.top = '50%';
+    levelUpMsg.style.left = '50%';
+    levelUpMsg.style.transform = 'translate(-50%, -50%)';
+    levelUpMsg.style.backgroundColor = '#8b5cf6';
+    levelUpMsg.style.color = 'white';
+    levelUpMsg.style.padding = '20px 40px';
+    levelUpMsg.style.borderRadius = '8px';
+    levelUpMsg.style.fontSize = '24px';
+    levelUpMsg.style.fontWeight = 'bold';
+    levelUpMsg.style.zIndex = '100';
+    gameArea.appendChild(levelUpMsg);
+    
+    // Remove message after delay and set up next level
+    setTimeout(() => {
+        gameArea.removeChild(levelUpMsg);
+        setupLevel();
+    }, 1500);
+}
+
+// Function to end the game
+function endGame() {
+    clearInterval(gameInterval);
+    gameActive = false;
+    
+    // Show game over message
+    const gameOverMsg = document.createElement('div');
+    gameOverMsg.innerHTML = `
+        <h2>Game Over!</h2>
+        <p>Final Score: ${score}</p>
+        <p>Levels Completed: ${level - 1}</p>
+    `;
+    gameOverMsg.style.position = 'absolute';
+    gameOverMsg.style.top = '50%';
+    gameOverMsg.style.left = '50%';
+    gameOverMsg.style.transform = 'translate(-50%, -50%)';
+    gameOverMsg.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+    gameOverMsg.style.padding = '30px';
+    gameOverMsg.style.borderRadius = '8px';
+    gameOverMsg.style.textAlign = 'center';
+    gameOverMsg.style.boxShadow = '0 4px 20px rgba(0,0,0,0.2)';
+    gameOverMsg.style.zIndex = '100';
+    gameArea.appendChild(gameOverMsg);
+    
+    // Re-enable start button
+    startButton.disabled = false;
+    startButton.style.backgroundColor = '#8b5cf6';
+}
+
+// Add event listeners for game controls
+startButton.addEventListener('click', startGame);
+resetButton.addEventListener('click', function() {
+    // Stop any running game
+    clearInterval(gameInterval);
+    
+    // Reset everything
+    gameActive = false;
+    startButton.disabled = false;
+    startButton.style.backgroundColor = '#8b5cf6';
+    
+    // Clear areas
+    dragonStaging.innerHTML = '';
+    nestsArea.innerHTML = '';
+    
+    // Reset displays
+    document.getElementById('game-score').textContent = '0';
+    document.getElementById('game-level').textContent = '1';
+    document.getElementById('game-timer').textContent = '60';
+    
+    // Remove any messages
+    const messages = gameArea.querySelectorAll('div:not(.nest):not(#dragon-staging):not(#nests-area)');
+    messages.forEach(msg => {
+        if (msg !== dragonStaging && msg !== nestsArea) {
+            gameArea.removeChild(msg);
+        }
+    });
+});
+
+// Initial setup
+document.getElementById('game-score').textContent = '0';
+document.getElementById('game-level').textContent = '1';
+document.getElementById('game-timer').textContent = '60';
     </script>
 </body>
 </html>
