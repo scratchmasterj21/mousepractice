@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mouse Skills Practice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f8ff;
+            color: #333;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #1a5276;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            margin-top: 0;
+            color: #2874a6;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        #hover-area {
+            width: 200px;
+            height: 100px;
+            background-color: #d6eaf8;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        
+        #hover-area:hover {
+            background-color: #85c1e9;
+        }
+        
+        #hover-feedback {
+            margin-top: 10px;
+            color: #2874a6;
+            font-weight: bold;
+        }
+        
+        #click-box {
+            width: 200px;
+            height: 100px;
+            background-color: #d5f5e3;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        #click-box:active {
+            background-color: #58d68d;
+        }
+        
+        #right-click-area {
+            width: 200px;
+            height: 100px;
+            background-color: #fdebd0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+        
+        #right-click-area:active {
+            background-color: #f5cba7;
+        }
+        
+        #double-click-box {
+            width: 200px;
+            height: 100px;
+            background-color: #ebdef0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        #double-click-box:active {
+            background-color: #d7bde2;
+        }
+        
+        #scroll-container {
+            width: 200px;
+            height: 150px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+        
+        #scroll-content {
+            height: 400px;
+            background: linear-gradient(180deg, #d6eaf8 0%, #85c1e9 100%);
+            padding: 10px;
+        }
+        
+        .draggable {
+            width: 80px;
+            height: 80px;
+            background-color: #f9e79f;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: move;
+            user-select: none;
+            transition: transform 0.2s;
+        }
+        
+        .draggable:hover {
+            transform: scale(1.05);
+        }
+        
+        #drop-zone {
+            width: 200px;
+            height: 100px;
+            background-color: #fadbd8;
+            border: 2px dashed #e74c3c;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        #drop-zone.highlight {
+            background-color: #f5b7b1;
+        }
+        
+        #drop-zone.success {
+            background-color: #abebc6;
+            border-color: #27ae60;
+        }
+        
+        #text-selection-area {
+            background-color: #f4f6f7;
+            padding: 15px;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+        
+        #selection-target {
+            background-color: #fadbd8;
+            padding: 0 3px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        .feedback {
+            margin-top: 10px;
+            min-height: 20px;
+        }
+        
+        .counter {
+            font-weight: bold;
+            color: #2874a6;
+        }
+        
+        .instruction {
+            font-style: italic;
+            margin-bottom: 10px;
+            color: #7f8c8d;
+        }
+        
+        .success-message {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+        }
+        
+        button:hover {
+            background-color: #2874a6;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mouse Skills Practice</h1>
+    
+    <div class="section">
+        <h2 class="section-title">1. Mouse Hover</h2>
+        <p class="instruction">Move your mouse over the blue area below:</p>
+        <div id="hover-area">Hover over me</div>
+        <div id="hover-feedback" class="feedback"></div>
+    </div>
+    
+    <div class="section">
+        <h2 class="section-title">2. Left Click</h2>
+        <p class="instruction">Click on the green box below:</p>
+        <div id="click-box">Click me</div>
+        <div class="feedback">Clicks: <span id="click-counter" class="counter">0</span></div>
+        <button id="reset-clicks">Reset Count</button>
+    </div>
+    
+    <div class="section">
+        <h2 class="section-title">3. Right Click</h2>
+        <p class="instruction">Right-click on the orange area below:</p>
+        <div id="right-click-area">Right-click me</div>
+        <div id="right-click-feedback" class="feedback"></div>
+    </div>
+    
+    <div class="section">
+        <h2 class="section-title">4. Double Click</h2>
+        <p class="instruction">Double-click on the purple box below:</p>
+        <div id="double-click-box">Double-click me</div>
+        <div class="feedback">Double-clicks: <span id="double-click-counter" class="counter">0</span></div>
+        <button id="reset-double-clicks">Reset Count</button>
+    </div>
+    
+    <div class="section">
+        <h2 class="section-title">5. Scrolling</h2>
+        <p class="instruction">Scroll inside this container:</p>
+        <div id="scroll-container">
+            <div id="scroll-content">Scroll up and down in this area</div>
+        </div>
+        <div class="feedback">Scroll events: <span id="scroll-counter" class="counter">0</span></div>
+        <button id="reset-scrolls">Reset Count</button>
+    </div>
+    
+    <div class="section">
+        <h2 class="section-title">6. Drag and Drop</h2>
+        <p class="instruction">Drag the yellow box into the drop zone:</p>
+        <div class="draggable" draggable="true">Drag me</div>
+        <div id="drop-zone">Drop here</div>
+        <div id="drag-drop-feedback" class="feedback"></div>
+        <button id="reset-drag">Reset</button>
+    </div>
+    
+    <div class="section">
+        <h2 class="section-title">7. Text Selection</h2>
+        <p class="instruction">Select the highlighted phrase below:</p>
+        <div id="text-selection-area">
+            This is a paragraph with some text. Try to select <span id="selection-target">this specific phrase</span> with your mouse to practice text selection skills.
+        </div>
+        <div id="selection-feedback" class="feedback"></div>
+    </div>
+
+    <script>
+        // 1. Mouse Hover
+        const hoverArea = document.getElementById('hover-area');
+        const hoverFeedback = document.getElementById('hover-feedback');
+        
+        hoverArea.addEventListener('mouseenter', () => {
+            hoverFeedback.textContent = 'Mouse is hovering over the area!';
+        });
+        
+        hoverArea.addEventListener('mouseleave', () => {
+            hoverFeedback.textContent = '';
+        });
+
+        // Level system for hover area
+let hoverLevel = 1;
+const hoverLevelDisplay = document.createElement('div');
+hoverLevelDisplay.textContent = `Level: ${hoverLevel}`;
+hoverLevelDisplay.style.marginTop = '10px';
+hoverArea.parentNode.insertBefore(hoverLevelDisplay, hoverFeedback);
+
+hoverArea.addEventListener('mouseenter', () => {
+    hoverFeedback.textContent = 'Mouse is hovering over the area!';
+    
+    // Move the box to a random position after a brief delay
+    setTimeout(() => {
+        const parentWidth = hoverArea.parentElement.offsetWidth - hoverArea.offsetWidth;
+        const parentHeight = 150; // Limited height to keep within section
+        
+        const randomX = Math.floor(Math.random() * parentWidth);
+        const randomY = Math.floor(Math.random() * parentHeight);
+        
+        hoverArea.style.position = 'relative';
+        hoverArea.style.left = `${randomX}px`;
+        hoverArea.style.top = `${randomY}px`;
+        
+        hoverLevel++;
+        hoverLevelDisplay.textContent = `Level: ${hoverLevel}`;
+    }, 500);
+});
+        
+        // 2. Left Click
+        const clickBox = document.getElementById('click-box');
+        const clickCounter = document.getElementById('click-counter');
+        const resetClicks = document.getElementById('reset-clicks');
+        let clickCount = 0;
+        
+        clickBox.addEventListener('click', () => {
+            clickCount++;
+            clickCounter.textContent = clickCount;
+        });
+        
+        resetClicks.addEventListener('click', () => {
+            clickCount = 0;
+            clickCounter.textContent = clickCount;
+        });
+        
+        // 3. Right Click
+        const rightClickArea = document.getElementById('right-click-area');
+        const rightClickFeedback = document.getElementById('right-click-feedback');
+        
+        rightClickArea.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            rightClickFeedback.textContent = 'You right-clicked!';
+            rightClickFeedback.className = 'feedback success-message';
+            
+            setTimeout(() => {
+                rightClickFeedback.textContent = '';
+                rightClickFeedback.className = 'feedback';
+            }, 2000);
+        });
+        
+        // 4. Double Click
+        const doubleClickBox = document.getElementById('double-click-box');
+        const doubleClickCounter = document.getElementById('double-click-counter');
+        const resetDoubleClicks = document.getElementById('reset-double-clicks');
+        let doubleClickCount = 0;
+        
+        doubleClickBox.addEventListener('dblclick', () => {
+            doubleClickCount++;
+            doubleClickCounter.textContent = doubleClickCount;
+        });
+        
+        resetDoubleClicks.addEventListener('click', () => {
+            doubleClickCount = 0;
+            doubleClickCounter.textContent = doubleClickCount;
+        });
+        
+        // 5. Scrolling
+        const scrollContainer = document.getElementById('scroll-container');
+        const scrollCounter = document.getElementById('scroll-counter');
+        const resetScrolls = document.getElementById('reset-scrolls');
+        let scrollCount = 0;
+        
+        scrollContainer.addEventListener('scroll', () => {
+            scrollCount++;
+            scrollCounter.textContent = scrollCount;
+        });
+        
+        resetScrolls.addEventListener('click', () => {
+            scrollCount = 0;
+            scrollCounter.textContent = scrollCount;
+        });
+        
+        // 6. Drag and Drop
+        const draggable = document.querySelector('.draggable');
+        const dropZone = document.getElementById('drop-zone');
+        const dragDropFeedback = document.getElementById('drag-drop-feedback');
+        const resetDrag = document.getElementById('reset-drag');
+        
+        draggable.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', 'dragged');
+            setTimeout(() => {
+                draggable.style.visibility = 'hidden';
+            }, 0);
+        });
+        
+        dropZone.addEventListener('dragenter', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('highlight');
+        });
+        
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+        
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('highlight');
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('highlight');
+            dropZone.classList.add('success');
+            dropZone.textContent = 'Item dropped successfully!';
+            dragDropFeedback.textContent = 'Great job! You successfully completed the drag and drop.';
+            dragDropFeedback.className = 'feedback success-message';
+        });
+        
+        resetDrag.addEventListener('click', () => {
+            draggable.style.visibility = 'visible';
+            dropZone.classList.remove('success');
+            dropZone.textContent = 'Drop here';
+            dragDropFeedback.textContent = '';
+            dragDropFeedback.className = 'feedback';
+        });
+        // First, update your HTML structure by replacing the single draggable with:
+const dragSection = document.querySelector('.draggable').parentElement;
+dragSection.removeChild(document.querySelector('.draggable'));
+
+// Create multiple draggable items
+const colors = ['#f9e79f', '#aed6f1', '#f5b7b1', '#d7bde2'];
+const labels = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
+
+const dragItemsContainer = document.createElement('div');
+dragItemsContainer.style.display = 'flex';
+dragItemsContainer.style.gap = '10px';
+dragItemsContainer.style.flexWrap = 'wrap';
+dragItemsContainer.style.marginBottom = '20px';
+
+// Insert before the drop zone
+dragSection.insertBefore(dragItemsContainer, document.getElementById('drop-zone'));
+
+// Create draggable items
+let dragLevel = 1;
+const dragLevelDisplay = document.createElement('div');
+dragLevelDisplay.textContent = `Level: ${dragLevel}`;
+dragLevelDisplay.style.marginBottom = '10px';
+dragSection.insertBefore(dragLevelDisplay, dragItemsContainer);
+
+// Create the items
+for (let i = 0; i < colors.length; i++) {
+    const draggable = document.createElement('div');
+    draggable.className = 'draggable';
+    draggable.draggable = true;
+    draggable.textContent = labels[i];
+    draggable.style.backgroundColor = colors[i];
+    draggable.dataset.id = i.toString();
+    
+    dragItemsContainer.appendChild(draggable);
+    
+    draggable.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text/plain', draggable.dataset.id);
+        setTimeout(() => {
+            draggable.style.visibility = 'hidden';
+        }, 0);
+    });
+}
+
+// Update drop handler
+let itemsDropped = 0;
+dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    const id = e.dataTransfer.getData('text/plain');
+    const draggedItem = document.querySelector(`.draggable[data-id="${id}"]`);
+    
+    dropZone.classList.remove('highlight');
+    dropZone.classList.add('success');
+    
+    itemsDropped++;
+    draggedItem.style.visibility = 'hidden';
+    
+    dragDropFeedback.textContent = `Great job! You've dropped ${itemsDropped} of ${colors.length} items.`;
+    dragDropFeedback.className = 'feedback success-message';
+    
+    if (itemsDropped === colors.length) {
+        dropZone.textContent = 'All items dropped successfully!';
+        dragLevel++;
+        dragLevelDisplay.textContent = `Level: ${dragLevel}`;
+        
+        // Reset for next level after delay
+        setTimeout(() => {
+            resetDragState();
+        }, 2000);
+    } else {
+        dropZone.textContent = `${itemsDropped} of ${colors.length} dropped!`;
+    }
+});
+
+// Update reset function
+function resetDragState() {
+    const allDraggables = document.querySelectorAll('.draggable');
+    allDraggables.forEach(item => {
+        item.style.visibility = 'visible';
+    });
+    
+    itemsDropped = 0;
+    dropZone.classList.remove('success');
+    dropZone.textContent = 'Drop here';
+    dragDropFeedback.textContent = '';
+    dragDropFeedback.className = 'feedback';
+}
+
+resetDrag.addEventListener('click', resetDragState);
+        // 7. Text Selection
+        const selectionTarget = document.getElementById('selection-target');
+        const selectionFeedback = document.getElementById('selection-feedback');
+        
+        document.addEventListener('selectionchange', () => {
+            const selection = window.getSelection();
+            if (selection.toString() === selectionTarget.textContent) {
+                selectionFeedback.textContent = 'You selected the correct text!';
+                selectionFeedback.className = 'feedback success-message';
+            } else if (selection.toString() && selection.toString().length > 0) {
+                selectionFeedback.textContent = 'Not quite. Try selecting exactly "this specific phrase".';
+                selectionFeedback.className = 'feedback';
+            } else {
+                selectionFeedback.textContent = '';
+            }
+        });
+        // Array of phrases for text selection practice
+const phrases = [
+    "this specific phrase",
+    "the highlighted text",
+    "these important words",
+    "select me carefully",
+    "this particular section",
+    "these exact words",
+    "this crucial part",
+    "the key sentence"
+];
+
+let currentPhraseIndex = 0;
+let textSelectionLevel = 1;
+
+// Add level display
+const selectionLevelDisplay = document.createElement('div');
+selectionLevelDisplay.textContent = `Level: ${textSelectionLevel}`;
+selectionLevelDisplay.style.marginTop = '10px';
+document.getElementById('text-selection-area').parentNode.insertBefore(
+    selectionLevelDisplay, 
+    document.getElementById('selection-feedback')
+);
+
+// Function to set a new phrase
+function setNewPhraseToSelect() {
+    currentPhraseIndex = (currentPhraseIndex + 1) % phrases.length;
+    const textArea = document.getElementById('text-selection-area');
+    const targetText = phrases[currentPhraseIndex];
+    
+    // Generate a random sentence structure
+    const sentenceParts = [
+        "This is a paragraph with some text. Try to select ",
+        "Please read this paragraph carefully and select ",
+        "In this exercise, you need to highlight ",
+        "Look at this text and try to select ",
+        "Read the following text and identify "
+    ];
+    
+    const endParts = [
+        " with your mouse.",
+        " to practice selection.",
+        " to complete this task.",
+        " as accurately as possible.",
+        " to demonstrate your selection skills."
+    ];
+    
+    const randomStart = sentenceParts[Math.floor(Math.random() * sentenceParts.length)];
+    const randomEnd = endParts[Math.floor(Math.random() * endParts.length)];
+    
+    textArea.innerHTML = `${randomStart}<span id="selection-target">${targetText}</span>${randomEnd}`;
+}
+
+// Update the selection change handler
+document.addEventListener('selectionchange', () => {
+    const selection = window.getSelection();
+    const selectionTarget = document.getElementById('selection-target');
+    
+    if (selection.toString() === selectionTarget.textContent) {
+        selectionFeedback.textContent = 'You selected the correct text!';
+        selectionFeedback.className = 'feedback success-message';
+        
+        // Move to next phrase after a brief delay
+        setTimeout(() => {
+            textSelectionLevel++;
+            selectionLevelDisplay.textContent = `Level: ${textSelectionLevel}`;
+            setNewPhraseToSelect();
+            selectionFeedback.textContent = '';
+        }, 1500);
+    } else if (selection.toString() && selection.toString().length > 0) {
+        selectionFeedback.textContent = `Not quite. Try selecting exactly "${selectionTarget.textContent}".`;
+        selectionFeedback.className = 'feedback';
+    } else {
+        selectionFeedback.textContent = '';
+    }
+});
+
+// Add a reset button for the text selection
+const resetTextSelection = document.createElement('button');
+resetTextSelection.textContent = 'Reset Text';
+resetTextSelection.addEventListener('click', () => {
+    textSelectionLevel = 1;
+    selectionLevelDisplay.textContent = `Level: ${textSelectionLevel}`;
+    currentPhraseIndex = 0;
+    setNewPhraseToSelect();
+    selectionFeedback.textContent = '';
+});
+
+document.getElementById('text-selection-area').parentNode.appendChild(resetTextSelection);
+    </script>
+</body>
+</html>
