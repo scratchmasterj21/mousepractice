@@ -1406,10 +1406,10 @@ function createDragon(dragonType) {
     dragon.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
     dragon.style.transform = 'scale(1)';
     dragon.style.transition = 'transform 0.2s, box-shadow 0.2s';
-    
+     
     // Dragon face
     const dragonFace = document.createElement('div');
-    dragonFace.innerHTML = `${dragonType.emoji}<div style="font-size:10px;">dragon</div>`;
+    dragonFace.innerHTML = `${dragonType.emoji}`;
     dragonFace.style.textAlign = 'center';
     dragon.appendChild(dragonFace);
     
@@ -1420,7 +1420,7 @@ function createDragon(dragonType) {
         e.dataTransfer.setData('text/plain', this.dataset.type);
         // Set a custom drag image (optional)
         const dragImg = new Image();
-        dragImg.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><circle cx="30" cy="30" r="30" fill="' + dragonType.color + '"/></svg>';
+        dragImg.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"><circle cx="30" cy="30" r="30" fill="' + dragonType.color + '"/></svg>';
         e.dataTransfer.setDragImage(dragImg, 30, 30);
     });
     
@@ -1447,8 +1447,8 @@ function createNest(dragonType) {
     const nest = document.createElement('div');
     nest.className = 'nest';
     nest.dataset.type = dragonType.type;
-    nest.style.width = '100px';
-    nest.style.height = '100px';
+    nest.style.width = '50px';
+    nest.style.height = '50px';
     nest.style.borderRadius = '50%';
     nest.style.backgroundColor = '#f3f4f6';
     nest.style.border = `3px dashed ${dragonType.color}`;
@@ -1539,8 +1539,8 @@ function createNest(dragonType) {
             
             // Create a mini-dragon in the nest
             const miniDragon = document.createElement('div');
-            miniDragon.style.width = '40px';
-            miniDragon.style.height = '40px';
+            miniDragon.style.width = '20px';
+            miniDragon.style.height = '20px';
             miniDragon.style.backgroundColor = dragonTypes.find(d => d.type === dragonType).color;
             miniDragon.style.borderRadius = '50%';
             miniDragon.style.display = 'flex';
