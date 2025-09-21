@@ -1718,8 +1718,8 @@ scrollContainer.addEventListener('scroll', () => {
             scrollScoreDisplay.textContent = Math.round(scrollScore);
         }
     
-    // Check if current target is in viewport
-    if (currentTarget && isElementInViewport(currentTarget)) {
+    // Check if current target is in viewport and hasn't been hit yet
+    if (currentTarget && isElementInViewport(currentTarget) && !currentTarget.classList.contains('hit')) {
         currentTarget.classList.add('hit');
         currentTarget.style.backgroundColor = '#9e9e9e';
         currentTarget.style.border = '3px solid #757575';
