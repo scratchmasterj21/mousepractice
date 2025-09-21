@@ -2075,6 +2075,9 @@ let timeToSelect = 0;
 let startTime = null;
 let difficultyFactor = 1;
 let consecutiveSuccesses = 0;
+let isProcessingSelection = false;
+let selectionCheckTimeout = null;
+let mistakeCheckTimeout = null;
 
 // Add level display and score tracking
 const selectionStatsContainer = document.createElement('div');
@@ -2090,11 +2093,15 @@ selectionTimerDisplay.textContent = `Time: 0.0s`;
 
 const selectionScoreDisplay = document.createElement('div');
 selectionScoreDisplay.textContent = `Score: 0`;
+
+const selectionProgressDisplay = document.createElement('div');
+selectionProgressDisplay.textContent = `Progress: 0/3`;
 let selectionScore = 0;
 
 selectionStatsContainer.appendChild(selectionLevelDisplay);
 selectionStatsContainer.appendChild(selectionTimerDisplay);
 selectionStatsContainer.appendChild(selectionScoreDisplay);
+selectionStatsContainer.appendChild(selectionProgressDisplay);
 
 document.getElementById('text-selection-area').parentNode.insertBefore(
     selectionStatsContainer, 
@@ -2221,67 +2228,119 @@ function shuffleArray(array) {
     return array;
 }
 
-// Update the selection change handler with timing and scoring
-document.addEventListener('selectionchange', () => {
-    const selection = window.getSelection();
-    const selectionTarget = document.getElementById('selection-target');
-    const selectionFeedback = document.getElementById('selection-feedback');
+// Function to check selection with debouncing
+function checkSelection() {
+    if (selectionCheckTimeout) {
+        clearTimeout(selectionCheckTimeout);
+    }
     
-    if (!selectionTarget) return;
-    
-    if (selection.toString() === selectionTarget.textContent) {
-        // Calculate score based on speed and level
-        const baseScore = Math.max(10, 50 - Math.floor(timeToSelect * 2));
-        const levelBonus = textSelectionLevel * 5;
-        const pointsEarned = baseScore + levelBonus;
+    selectionCheckTimeout = setTimeout(() => {
+        const selection = window.getSelection();
+        const selectionTarget = document.getElementById('selection-target');
+        const selectionFeedback = document.getElementById('selection-feedback');
         
-        selectionScore += pointsEarned;
-        selectionScoreDisplay.textContent = `Score: ${selectionScore}`;
+        console.log(`Checking selection: selection="${selection.toString()}", isProcessing=${isProcessingSelection}`);
         
-        // Update feedback
-        selectionFeedback.textContent = `Perfect! +${pointsEarned} points (${baseScore} speed + ${levelBonus} level bonus)`;
-        selectionFeedback.className = 'feedback success-message';
+        if (!selectionTarget || isProcessingSelection) return;
         
-        // Track consecutive successes for difficulty adjustment
-        consecutiveSuccesses++;
-        
-        // Move to next phrase after a brief delay
-        setTimeout(() => {
-            // Increase level every 3 successful selections
-            if (consecutiveSuccesses >= 3) {
-                textSelectionLevel++;
-                selectionLevelDisplay.textContent = `Level: ${textSelectionLevel}`;
-                consecutiveSuccesses = 0;
+        // Check if the selection exactly matches the target text
+        if (selection.toString().trim() === selectionTarget.textContent.trim()) {
+            console.log(`Exact match found! Target: "${selectionTarget.textContent}", Selection: "${selection.toString()}"`);
+            isProcessingSelection = true;
+            
+            // Calculate score based on speed and level
+            const baseScore = Math.max(10, 50 - Math.floor(timeToSelect * 2));
+            const levelBonus = textSelectionLevel * 5;
+            const pointsEarned = baseScore + levelBonus;
+            
+            selectionScore += pointsEarned;
+            selectionScoreDisplay.textContent = `Score: ${selectionScore}`;
+            
+            // Update feedback
+            selectionFeedback.textContent = `Perfect! +${pointsEarned} points (${baseScore} speed + ${levelBonus} level bonus)`;
+            selectionFeedback.className = 'feedback success-message';
+            
+            // Track consecutive successes for difficulty adjustment
+            consecutiveSuccesses++;
+            selectionProgressDisplay.textContent = `Progress: ${consecutiveSuccesses}/3`;
+            console.log(`Success! Consecutive successes: ${consecutiveSuccesses}`);
+            
+            // Move to next phrase after a brief delay
+            setTimeout(() => {
+                // Increase level every 3 successful selections
+                console.log(`Checking level up: consecutiveSuccesses = ${consecutiveSuccesses}`);
+                if (consecutiveSuccesses >= 3) {
+                    textSelectionLevel++;
+                    selectionLevelDisplay.textContent = `Level: ${textSelectionLevel}`;
+                    consecutiveSuccesses = 0;
+                    selectionProgressDisplay.textContent = `Progress: 0/3`;
+                    console.log(`LEVEL UP! New level: ${textSelectionLevel}`);
+                    
+                    // Increase difficulty factor
+                    difficultyFactor = 1 + (textSelectionLevel * 0.1);
+                    
+                    // Show level up message
+                    selectionFeedback.textContent = `🎉 Level Up! Now at Level ${textSelectionLevel}`;
+                    selectionFeedback.className = 'feedback success-message';
+                }
                 
-                // Increase difficulty factor
-                difficultyFactor = 1 + (textSelectionLevel * 0.1);
+                setNewPhraseToSelect();
+                if (consecutiveSuccesses < 3) {
+                    selectionFeedback.textContent = '';
+                }
+                
+                // Reset processing flag after a short delay to allow new selections
+                setTimeout(() => {
+                    isProcessingSelection = false;
+                }, 500);
+            }, 1500);
+        } else if (selection.toString() && selection.toString().length > 0) {
+            // Clear any existing mistake check timeout
+            if (mistakeCheckTimeout) {
+                clearTimeout(mistakeCheckTimeout);
             }
             
-            setNewPhraseToSelect();
-            selectionFeedback.textContent = '';
-        }, 1500);
-    } else if (selection.toString() && selection.toString().length > 0) {
-        // Calculate how far off the selection is
-        const targetText = selectionTarget.textContent;
-        const selectedText = selection.toString();
-        
-        // Simple feedback based on selection length comparison
-        if (selectedText.length < targetText.length) {
-            selectionFeedback.textContent = `Not enough text selected. Try selecting exactly "${selectionTarget.textContent}".`;
-        } else if (selectedText.length > targetText.length) {
-            selectionFeedback.textContent = `Too much text selected. Try selecting exactly "${selectionTarget.textContent}".`;
+            // Calculate how far off the selection is
+            const targetText = selectionTarget.textContent;
+            const selectedText = selection.toString();
+            
+            // Only reset progress if it's a clear mistake (completely wrong text, not just partial)
+            const isPartialSelection = selectedText.length < targetText.length && targetText.startsWith(selectedText);
+            const isCompletelyWrong = !targetText.includes(selectedText) && !selectedText.includes(targetText);
+            
+            if (isPartialSelection) {
+                // Don't reset progress for partial selections - user is still working on it
+                selectionFeedback.textContent = `Keep going! Select the complete phrase: "${selectionTarget.textContent}".`;
+                selectionFeedback.className = 'feedback';
+                console.log(`Partial selection - not resetting progress`);
+            } else if (isCompletelyWrong) {
+                // Only reset for completely wrong selections, but with a delay to avoid false positives
+                mistakeCheckTimeout = setTimeout(() => {
+                    // Double-check that the selection is still wrong after the delay
+                    const currentSelection = window.getSelection().toString();
+                    if (currentSelection !== targetText && currentSelection.length > 0) {
+                        selectionFeedback.textContent = `Try selecting exactly "${selectionTarget.textContent}".`;
+                        selectionFeedback.className = 'feedback';
+                        consecutiveSuccesses = 0;
+                        selectionProgressDisplay.textContent = `Progress: 0/3`;
+                        console.log(`Completely wrong selection! Reset consecutive successes to 0`);
+                    }
+                }, 1000); // 1 second delay before considering it a mistake
+            } else {
+                // Close but not exact - don't reset, just give feedback
+                selectionFeedback.textContent = `Close! Try selecting exactly "${selectionTarget.textContent}".`;
+                selectionFeedback.className = 'feedback';
+                console.log(`Close selection - not resetting progress`);
+            }
         } else {
-            selectionFeedback.textContent = `Close, but not exact. Try selecting exactly "${selectionTarget.textContent}".`;
+            // No selection made - don't reset consecutive successes
+            selectionFeedback.textContent = '';
         }
-        
-        selectionFeedback.className = 'feedback';
-        
-        // Reset consecutive successes when there's a mistake
-        consecutiveSuccesses = 0;
-    } else {
-        selectionFeedback.textContent = '';
-    }
-});
+    }, 100); // 100ms debounce
+}
+
+// Update the selection change handler with debouncing
+document.addEventListener('selectionchange', checkSelection);
 
 // Add a reset button for the text selection with improved styling
 const resetTextSelection = document.createElement('button');
@@ -2300,8 +2359,18 @@ resetTextSelection.addEventListener('click', () => {
     selectionScore = 0;
     selectionScoreDisplay.textContent = `Score: ${selectionScore}`;
     consecutiveSuccesses = 0;
+    selectionProgressDisplay.textContent = `Progress: 0/3`;
     difficultyFactor = 1;
     currentPhraseIndex = 0;
+    isProcessingSelection = false;
+    if (selectionCheckTimeout) {
+        clearTimeout(selectionCheckTimeout);
+        selectionCheckTimeout = null;
+    }
+    if (mistakeCheckTimeout) {
+        clearTimeout(mistakeCheckTimeout);
+        mistakeCheckTimeout = null;
+    }
     shuffleArray(phrases);
     setNewPhraseToSelect();
     document.getElementById('selection-feedback').textContent = '';
@@ -2322,7 +2391,18 @@ challengeButton.style.cursor = 'pointer';
 challengeButton.addEventListener('click', () => {
     textSelectionLevel = 10;
     selectionLevelDisplay.textContent = `Level: ${textSelectionLevel}`;
+    consecutiveSuccesses = 0;
+    selectionProgressDisplay.textContent = `Progress: 0/3`;
     difficultyFactor = 2;
+    isProcessingSelection = false;
+    if (selectionCheckTimeout) {
+        clearTimeout(selectionCheckTimeout);
+        selectionCheckTimeout = null;
+    }
+    if (mistakeCheckTimeout) {
+        clearTimeout(mistakeCheckTimeout);
+        mistakeCheckTimeout = null;
+    }
     document.getElementById('selection-feedback').textContent = 'Challenge mode activated! Good luck!';
     document.getElementById('selection-feedback').className = 'feedback';
     setNewPhraseToSelect();
