@@ -37,16 +37,46 @@
         #hover-area {
             width: 100px;
             height: 50px;
-            background-color: #d6eaf8;
-            border-radius: 8px;
+            background: linear-gradient(135deg, #d6eaf8 0%, #85c1e9 100%);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #hover-area::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
         }
         
         #hover-area:hover {
-            background-color: #85c1e9;
+            background: linear-gradient(135deg, #85c1e9 0%, #5dade2 100%);
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            border-color: #3498db;
+        }
+        
+        #hover-area:hover::before {
+            opacity: 1;
+            animation: shimmer 1.5s ease-in-out;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
         
         #hover-feedback {
@@ -58,116 +88,383 @@
         #click-box {
             width: 200px;
             height: 100px;
-            background-color: #d5f5e3;
-            border-radius: 8px;
+            background: linear-gradient(135deg, #d5f5e3 0%, #58d68d 100%);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #click-box::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+        }
+        
+        #click-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            border-color: #27ae60;
         }
         
         #click-box:active {
-            background-color: #58d68d;
+            background: linear-gradient(135deg, #58d68d 0%, #27ae60 100%);
+            transform: translateY(0) scale(0.98);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        #click-box:active::before {
+            width: 300px;
+            height: 300px;
         }
         
         #right-click-area {
             width: 200px;
             height: 100px;
-            background-color: #fdebd0;
-            border-radius: 8px;
+            background: linear-gradient(135deg, #fdebd0 0%, #f5cba7 100%);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.2s;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #right-click-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        #right-click-area:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            border-color: #e67e22;
+        }
+        
+        #right-click-area:hover::before {
+            left: 100%;
         }
         
         #right-click-area:active {
-            background-color: #f5cba7;
+            background: linear-gradient(135deg, #f5cba7 0%, #e67e22 100%);
+            transform: translateY(0) scale(0.98);
         }
         
         #double-click-box {
             width: 200px;
             height: 100px;
-            background-color: #ebdef0;
-            border-radius: 8px;
+            background: linear-gradient(135deg, #ebdef0 0%, #d7bde2 100%);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #double-click-box::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.4s ease;
+        }
+        
+        #double-click-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            border-color: #8e44ad;
         }
         
         #double-click-box:active {
-            background-color: #d7bde2;
+            background: linear-gradient(135deg, #d7bde2 0%, #8e44ad 100%);
+            transform: translateY(0) scale(0.98);
+        }
+        
+        #double-click-box:active::after {
+            width: 200px;
+            height: 200px;
         }
         
         #scroll-container {
-            width: 200px;
-            height: 150px;
+            width: 300px;
+            height: 300px;
             overflow-y: auto;
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 8px;
-            background-color: #fff;
+            border: 2px solid #3498db;
+            padding: 15px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            scroll-behavior: smooth;
+        }
+        
+        #scroll-container::-webkit-scrollbar {
+            width: 12px;
+        }
+        
+        #scroll-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 6px;
+        }
+        
+        #scroll-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #3498db 0%, #2980b9 100%);
+            border-radius: 6px;
+            border: 2px solid #f1f1f1;
+        }
+        
+        #scroll-container::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #2980b9 0%, #1f618d 100%);
         }
         
         #scroll-content {
-            height: 400px;
-            background: linear-gradient(180deg, #d6eaf8 0%, #85c1e9 100%);
-            padding: 10px;
+            height: 800px;
+            background: linear-gradient(180deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
+            padding: 20px;
+            position: relative;
+            border-radius: 8px;
+        }
+        
+        .scroll-target {
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        
+        .scroll-target.active {
+            animation: glow 1.5s infinite alternate;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
+        }
+        
+        .scroll-target.hit {
+            animation: successPulse 0.6s ease-out;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes glow {
+            0% { box-shadow: 0 0 20px rgba(76, 175, 80, 0.6); }
+            100% { box-shadow: 0 0 30px rgba(76, 175, 80, 0.9); }
+        }
+        
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .scroll-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ffd700;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 1; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.7; }
+        }
+        
+        .scroll-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4caf50 0%, #8bc34a 100%);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+            z-index: 10;
         }
         
         .draggable {
             width: 80px;
             height: 80px;
-            background-color: #f9e79f;
-            border-radius: 8px;
+            background: linear-gradient(135deg, #f9e79f 0%, #f7dc6f 100%);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: move;
             user-select: none;
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .draggable::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
         }
         
         .draggable:hover {
-            transform: scale(1.05);
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            border-color: #f1c40f;
+        }
+        
+        .draggable:hover::before {
+            opacity: 1;
+            animation: shimmer 1.5s ease-in-out;
+        }
+        
+        .draggable:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
         
         #drop-zone {
             width: 200px;
             height: 100px;
-            background-color: #fadbd8;
-            border: 2px dashed #e74c3c;
-            border-radius: 8px;
+            background: linear-gradient(135deg, #fadbd8 0%, #f5b7b1 100%);
+            border: 3px dashed #e74c3c;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #drop-zone::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s ease;
         }
         
         #drop-zone.highlight {
-            background-color: #f5b7b1;
+            background: linear-gradient(135deg, #f5b7b1 0%, #ec7063 100%);
+            border-color: #c0392b;
+            border-style: solid;
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+        }
+        
+        #drop-zone.highlight::before {
+            left: 100%;
         }
         
         #drop-zone.success {
-            background-color: #abebc6;
+            background: linear-gradient(135deg, #abebc6 0%, #58d68d 100%);
             border-color: #27ae60;
+            border-style: solid;
+            animation: successPulse 0.6s ease-out;
         }
         
         #text-selection-area {
-            background-color: #f4f6f7;
-            padding: 15px;
-            border-radius: 8px;
-            line-height: 1.6;
+            background: linear-gradient(135deg, #f4f6f7 0%, #e8f4f8 100%);
+            padding: 20px;
+            border-radius: 12px;
+            line-height: 1.8;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid #e1e8ed;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #text-selection-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 2s ease;
+        }
+        
+        #text-selection-area:hover::before {
+            left: 100%;
         }
         
         #selection-target {
-            background-color: #fadbd8;
-            padding: 0 3px;
-            border-radius: 3px;
+            background: linear-gradient(135deg, #fadbd8 0%, #f5b7b1 100%);
+            padding: 2px 6px;
+            border-radius: 6px;
             font-weight: bold;
+            border: 2px solid #e74c3c;
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #selection-target::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.4), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+        
+        #selection-target:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+        
+        #selection-target:hover::before {
+            opacity: 1;
+            animation: shimmer 1.5s ease-in-out;
         }
         
         .feedback {
@@ -192,18 +489,468 @@
         }
         
         button {
-            background-color: #3498db;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
             color: white;
             border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
+            padding: 10px 20px;
+            border-radius: 8px;
             cursor: pointer;
             margin-top: 10px;
-            transition: background-color 0.2s;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            font-weight: bold;
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
         }
         
         button:hover {
-            background-color: #2874a6;
+            background: linear-gradient(135deg, #2980b9 0%, #1f618d 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+            border-color: #1f618d;
+        }
+        
+        button:hover::before {
+            left: 100%;
+        }
+        
+        button:active {
+            transform: translateY(0) scale(0.98);
+            box-shadow: 0 2px 10px rgba(52, 152, 219, 0.3);
+        }
+        
+        /* Target Practice Arena Styles */
+        #target-practice-arena {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+        }
+        
+        .arena-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 3px solid #34495e;
+        }
+        
+        .arena-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 50%);
+        }
+        
+        .arena-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #6c757d;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #495057;
+        }
+        
+        .lives-display {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .life-heart {
+            width: 20px;
+            height: 20px;
+            background: #e74c3c;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            transition: all 0.3s ease;
+        }
+        
+        .life-heart.lost {
+            background: #7f8c8d;
+            transform: scale(0.8);
+        }
+        
+        .arena-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .arena-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .arena-btn.primary {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+        
+        .arena-btn.secondary {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            color: white;
+        }
+        
+        .arena-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .arena-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+        
+        /* Target Styles */
+        .target {
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .target:hover {
+            transform: scale(1.1);
+        }
+        
+        .target.click-target {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            border: 3px solid #fff;
+        }
+        
+        .target.double-click-target {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            border: 3px solid #fff;
+        }
+        
+        .target.right-click-target {
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            border: 3px solid #fff;
+        }
+        
+        .target.drag-target {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            border: 3px solid #fff;
+            cursor: move;
+        }
+        
+        .target.scroll-target {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            border: 3px solid #fff;
+        }
+        
+        .target.text-selection-target {
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+            border: 3px solid #fff;
+        }
+        
+        .target.mix-target {
+            background: linear-gradient(135deg, #8e44ad 0%, #7d3c98 100%);
+            border: 3px solid #fff;
+            animation: mixPulse 2s infinite;
+        }
+        
+        @keyframes mixPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .target.hit {
+            animation: targetHit 0.5s ease-out forwards;
+        }
+        
+        @keyframes targetHit {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.8; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+        
+        /* Drop Zones */
+        .drop-zone {
+            position: absolute;
+            border: 3px dashed #fff;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .drop-zone.highlight {
+            background: rgba(46, 204, 113, 0.3);
+            border-color: #2ecc71;
+            transform: scale(1.05);
+        }
+        
+        .drop-zone.success {
+            background: rgba(46, 204, 113, 0.5);
+            border-color: #27ae60;
+            animation: successPulse 0.6s ease-out;
+        }
+        
+        /* Scroll Area */
+        .scroll-challenge {
+            position: absolute;
+            width: 200px;
+            height: 150px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 8px;
+            overflow-y: auto;
+            border: 2px solid #34495e;
+            padding: 10px;
+        }
+        
+        .scroll-content {
+            height: 300px;
+            background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        .scroll-item {
+            background: #3498db;
+            color: white;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        /* Particle Effects */
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #ffd700;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        .hit-feedback {
+            position: absolute;
+            color: #fff;
+            font-weight: bold;
+            font-size: 18px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            pointer-events: none;
+            z-index: 1000;
+            animation: feedbackFloat 1s ease-out forwards;
+        }
+        
+        @keyframes feedbackFloat {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-50px) scale(1.2); opacity: 0; }
+        }
+        
+        /* Skill Indicators */
+        .skill-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 100;
+        }
+        
+        .skill-indicator.click { background: rgba(231, 76, 60, 0.8); }
+        .skill-indicator.double-click { background: rgba(243, 156, 18, 0.8); }
+        .skill-indicator.right-click { background: rgba(155, 89, 182, 0.8); }
+        .skill-indicator.drag { background: rgba(39, 174, 96, 0.8); }
+        .skill-indicator.scroll { background: rgba(52, 152, 219, 0.8); }
+        .skill-indicator.text-selection { background: rgba(230, 126, 34, 0.8); }
+        .skill-indicator.mix { background: rgba(142, 68, 173, 0.8); }
+        
+        /* Text Selection Challenge */
+        .text-selection-challenge {
+            position: absolute;
+            width: 250px;
+            height: 120px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 8px;
+            border: 2px solid #e67e22;
+            padding: 15px;
+            font-family: Arial, sans-serif;
+            line-height: 1.4;
+            color: #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .text-selection-challenge .selectable-text {
+            background: linear-gradient(135deg, #fadbd8 0%, #f5b7b1 100%);
+            color: #e74c3c;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: text;
+            transition: all 0.3s ease;
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            border: 2px solid #e74c3c;
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .text-selection-challenge .selectable-text::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+        
+        .text-selection-challenge .selectable-text:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+        
+        .text-selection-challenge .selectable-text:hover::before {
+            opacity: 1;
+            animation: shimmer 1.5s ease-in-out;
+        }
+        
+        .text-selection-challenge .selectable-text.selected {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            animation: successPulse 0.6s ease-out;
+        }
+        
+        /* Text Selection Progress Bar */
+        .text-selection-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #e74c3c 0%, #f39c12 50%, #27ae60 100%);
+            border-radius: 0 0 8px 8px;
+            transition: width 0.1s linear;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        /* Game Over Overlay */
+        .game-over-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        
+        .game-over-title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #e74c3c;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .game-over-stats {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .game-over-stats h3 {
+            margin: 10px 0;
+            color: #f39c12;
+        }
+        
+        .game-over-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .game-over-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
         }
     </style>
 </head>
@@ -269,9 +1016,9 @@
     </div>
 
     <div class="section">
-        <h2 class="section-title">8. Dragon Drop</h2>
-        <p class="instruction">Drag the dragons to their nest</p>
-        <div id="dragondrop">
+        <h2 class="section-title">8. Target Practice Arena</h2>
+        <p class="instruction">Master all mouse skills in this comprehensive training arena!</p>
+        <div id="target-practice-arena">
         </div>
     </div>
 
@@ -542,7 +1289,7 @@ function moveElementToRandomPosition(element, container) {
     element.style.top = `${randomY}px`;
 }
         
-// 5. Scrolling - Enhanced Version
+// 5. Scrolling - Enhanced Version with Advanced Features
 const scrollContainer = document.getElementById('scroll-container');
 const scrollCounter = document.getElementById('scroll-counter');
 const resetScrolls = document.getElementById('reset-scrolls');
@@ -550,19 +1297,49 @@ let scrollCount = 0;
 let scrollDistance = 0;
 let lastScrollTop = 0;
 let scrollLevel = 1;
-let targetsHit = 0;
+let scrollTargetsHit = 0;
 let currentTarget = null;
+let scrollStartTime = null;
+let scrollComboMultiplier = 1;
+let perfectScrolls = 0;
+let powerUps = [];
+let particles = [];
 
-// Create a scroll stats display
+// Create an enhanced scroll stats display
 const scrollStatsDisplay = document.createElement('div');
-scrollStatsDisplay.style.display = 'flex';
-scrollStatsDisplay.style.justifyContent = 'space-between';
-scrollStatsDisplay.style.marginBottom = '10px';
+scrollStatsDisplay.style.display = 'grid';
+scrollStatsDisplay.style.gridTemplateColumns = 'repeat(3, 1fr)';
+scrollStatsDisplay.style.gap = '10px';
+scrollStatsDisplay.style.marginBottom = '15px';
+scrollStatsDisplay.style.padding = '15px';
+scrollStatsDisplay.style.backgroundColor = '#f8f9fa';
+scrollStatsDisplay.style.borderRadius = '8px';
+scrollStatsDisplay.style.border = '1px solid #dee2e6';
 scrollStatsDisplay.innerHTML = `
-    <div>Level: <span id="scroll-level">1</span></div>
-    <div>Scrolls: <span id="scroll-count">0</span></div>
-    <div>Distance: <span id="scroll-distance">0</span>px</div>
-    <div>Targets: <span id="targets-hit">0</span>/<span id="total-targets">0</span></div>
+    <div style="text-align: center;">
+        <div style="font-weight: bold; color: #495057;">Level</div>
+        <div id="scroll-level" style="font-size: 24px; color: #007bff;">1</div>
+    </div>
+    <div style="text-align: center;">
+        <div style="font-weight: bold; color: #495057;">Score</div>
+        <div id="scroll-score" style="font-size: 20px; color: #28a745;">0</div>
+    </div>
+    <div style="text-align: center;">
+        <div style="font-weight: bold; color: #495057;">Combo</div>
+        <div id="scroll-combo" style="font-size: 18px; color: #ffc107;">x1</div>
+    </div>
+    <div style="text-align: center;">
+        <div style="font-weight: bold; color: #495057;">Targets</div>
+        <div><span id="targets-hit" style="color: #28a745;">0</span>/<span id="total-targets" style="color: #6c757d;">0</span></div>
+    </div>
+    <div style="text-align: center;">
+        <div style="font-weight: bold; color: #495057;">Perfect</div>
+        <div id="perfect-scrolls" style="color: #dc3545;">0</div>
+    </div>
+    <div style="text-align: center;">
+        <div style="font-weight: bold; color: #495057;">Time</div>
+        <div id="scroll-timer" style="color: #17a2b8;">0.0s</div>
+    </div>
 `;
 
 // Insert stats display before the scroll container
@@ -570,10 +1347,16 @@ scrollContainer.parentNode.insertBefore(scrollStatsDisplay, scrollContainer);
 
 // Update display elements
 const scrollLevelDisplay = document.getElementById('scroll-level');
-const scrollCountDisplay = document.getElementById('scroll-count');
-const scrollDistanceDisplay = document.getElementById('scroll-distance');
+const scrollScoreDisplay = document.getElementById('scroll-score');
+const scrollComboDisplay = document.getElementById('scroll-combo');
 const targetsHitDisplay = document.getElementById('targets-hit');
 const totalTargetsDisplay = document.getElementById('total-targets');
+const perfectScrollsDisplay = document.getElementById('perfect-scrolls');
+const scrollTimerDisplay = document.getElementById('scroll-timer');
+
+let scrollScore = 0;
+let scrollTimer = 0;
+let scrollTimerInterval = null;
 
 // Enhance scroll container style
 scrollContainer.style.position = 'relative';
@@ -583,29 +1366,92 @@ scrollContainer.style.border = '1px solid #ccc';
 scrollContainer.style.padding = '10px';
 scrollContainer.style.backgroundColor = '#f9f9f9';
 
-// Generate content with random heights to make scrolling interesting
+// Generate enhanced content with visual elements and power-ups
 function generateScrollContent() {
     scrollContainer.innerHTML = '';
+    
+    // Add progress bar
+    const progressBar = document.createElement('div');
+    progressBar.className = 'scroll-progress';
+    progressBar.style.width = '0%';
+    scrollContainer.appendChild(progressBar);
+    
     const targetCount = 3 + Math.min(scrollLevel, 7); // More targets at higher levels
     totalTargetsDisplay.textContent = targetCount;
     
-    // Create a long content div
+    // Create a long content div with enhanced visuals
     const contentHeight = 1200 + (scrollLevel * 200); // Increases with level
     const content = document.createElement('div');
     content.style.height = `${contentHeight}px`;
     content.style.position = 'relative';
+    content.style.background = `linear-gradient(180deg, 
+        #e3f2fd 0%, 
+        #bbdefb 25%, 
+        #90caf9 50%, 
+        #64b5f6 75%, 
+        #42a5f5 100%)`;
     
-    // Add some visual elements at random positions
-    for (let i = 0; i < 20; i++) {
+    // Add decorative elements and obstacles
+    for (let i = 0; i < 30; i++) {
         const element = document.createElement('div');
         element.style.position = 'absolute';
-        element.style.width = '80%';
-        element.style.height = '40px';
-        element.style.backgroundColor = '#e1e1e1';
-        element.style.left = '10%';
+        element.style.width = `${60 + Math.random() * 40}%`;
+        element.style.height = `${20 + Math.random() * 30}px`;
+        element.style.backgroundColor = `rgba(255, 255, 255, ${0.3 + Math.random() * 0.4})`;
+        element.style.left = `${Math.random() * 20}%`;
         element.style.top = `${Math.floor(Math.random() * (contentHeight - 50))}px`;
-        element.style.borderRadius = '4px';
+        element.style.borderRadius = '8px';
+        element.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
         content.appendChild(element);
+    }
+    
+    // Add floating particles
+    for (let i = 0; i < 15; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'scroll-particle';
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * contentHeight}px`;
+        particle.style.animationDelay = `${Math.random() * 3}s`;
+        content.appendChild(particle);
+    }
+    
+    // Add power-ups at random positions
+    const powerUpTypes = ['speed', 'magnet', 'bonus'];
+    for (let i = 0; i < Math.min(scrollLevel, 5); i++) {
+        const powerUp = document.createElement('div');
+        powerUp.className = 'power-up';
+        powerUp.dataset.type = powerUpTypes[Math.floor(Math.random() * powerUpTypes.length)];
+        powerUp.style.position = 'absolute';
+        powerUp.style.width = '40px';
+        powerUp.style.height = '40px';
+        powerUp.style.borderRadius = '50%';
+        powerUp.style.left = `${10 + Math.random() * 80}%`;
+        powerUp.style.top = `${Math.floor(Math.random() * (contentHeight - 50))}px`;
+        powerUp.style.display = 'flex';
+        powerUp.style.justifyContent = 'center';
+        powerUp.style.alignItems = 'center';
+        powerUp.style.fontSize = '20px';
+        powerUp.style.cursor = 'pointer';
+        powerUp.style.animation = 'pulse 2s infinite';
+        
+        // Set power-up appearance based on type
+        switch (powerUp.dataset.type) {
+            case 'speed':
+                powerUp.style.backgroundColor = '#ff6b6b';
+                powerUp.textContent = '⚡';
+                break;
+            case 'magnet':
+                powerUp.style.backgroundColor = '#4ecdc4';
+                powerUp.textContent = '🧲';
+                break;
+            case 'bonus':
+                powerUp.style.backgroundColor = '#ffe66d';
+                powerUp.textContent = '💎';
+                break;
+        }
+        
+        powerUp.addEventListener('click', () => activatePowerUp(powerUp.dataset.type, powerUp));
+        content.appendChild(powerUp);
     }
     
     // Add scroll targets at specific positions
@@ -614,7 +1460,7 @@ function generateScrollContent() {
         let position;
         do {
             position = Math.floor(Math.random() * (contentHeight - 100));
-        } while (targetPositions.some(pos => Math.abs(pos - position) < 100));
+        } while (targetPositions.some(pos => Math.abs(pos - position) < 120));
         
         targetPositions.push(position);
         
@@ -622,18 +1468,21 @@ function generateScrollContent() {
         target.className = 'scroll-target';
         target.dataset.id = i;
         target.style.position = 'absolute';
-        target.style.width = '90%';
-        target.style.height = '60px';
+        target.style.width = '85%';
+        target.style.height = '70px';
         target.style.backgroundColor = '#ffcc00';
-        target.style.left = '5%';
+        target.style.left = '7.5%';
         target.style.top = `${position}px`;
-        target.style.borderRadius = '4px';
+        target.style.borderRadius = '12px';
         target.style.display = 'flex';
         target.style.justifyContent = 'center';
         target.style.alignItems = 'center';
         target.style.fontWeight = 'bold';
-        target.style.border = '2px dashed #cc9900';
-        target.textContent = `Target ${i + 1}`;
+        target.style.fontSize = '16px';
+        target.style.border = '3px solid #ff9800';
+        target.style.boxShadow = '0 4px 15px rgba(255, 152, 0, 0.3)';
+        target.style.color = '#333';
+        target.textContent = `🎯 Target ${i + 1}`;
         content.appendChild(target);
     }
     
@@ -641,6 +1490,77 @@ function generateScrollContent() {
     
     // Set the first target as active
     activateNextTarget();
+    
+    // Start timer
+    scrollStartTime = Date.now();
+    scrollTimer = 0;
+    if (scrollTimerInterval) clearInterval(scrollTimerInterval);
+    scrollTimerInterval = setInterval(() => {
+        scrollTimer = (Date.now() - scrollStartTime) / 1000;
+        scrollTimerDisplay.textContent = `${scrollTimer.toFixed(1)}s`;
+    }, 100);
+}
+
+// Power-up activation function
+function activatePowerUp(type, element) {
+    element.style.display = 'none';
+    
+    switch (type) {
+        case 'speed':
+            scrollScore += 50;
+            createFloatingText('+50 Speed!', element);
+            // Temporarily increase scroll speed
+            scrollContainer.style.scrollBehavior = 'auto';
+            setTimeout(() => {
+                scrollContainer.style.scrollBehavior = 'smooth';
+            }, 3000);
+            break;
+        case 'magnet':
+            scrollScore += 75;
+            createFloatingText('+75 Magnet!', element);
+            // Auto-scroll to next target
+            if (currentTarget) {
+                const targetRect = currentTarget.getBoundingClientRect();
+                const containerRect = scrollContainer.getBoundingClientRect();
+                const targetTop = currentTarget.offsetTop - scrollContainer.scrollTop;
+                scrollContainer.scrollTo({
+                    top: targetTop - 50,
+                    behavior: 'smooth'
+                });
+            }
+            break;
+        case 'bonus':
+            scrollScore += 100;
+            scrollComboMultiplier += 0.5;
+            createFloatingText('+100 Bonus!', element);
+            break;
+    }
+    
+    scrollScoreDisplay.textContent = Math.round(scrollScore);
+    scrollComboDisplay.textContent = `x${scrollComboMultiplier.toFixed(1)}`;
+}
+
+// Create floating text effect
+function createFloatingText(text, element) {
+    const floatingText = document.createElement('div');
+    floatingText.textContent = text;
+    floatingText.style.position = 'absolute';
+    floatingText.style.left = element.style.left;
+    floatingText.style.top = element.style.top;
+    floatingText.style.color = '#fff';
+    floatingText.style.fontWeight = 'bold';
+    floatingText.style.fontSize = '14px';
+    floatingText.style.pointerEvents = 'none';
+    floatingText.style.zIndex = '1000';
+    floatingText.style.animation = 'float 2s ease-out forwards';
+    
+    scrollContainer.appendChild(floatingText);
+    
+    setTimeout(() => {
+        if (scrollContainer.contains(floatingText)) {
+            scrollContainer.removeChild(floatingText);
+        }
+    }, 2000);
 }
 
 // Activate the next target to scroll to
@@ -654,10 +1574,17 @@ function activateNextTarget() {
     
     // Select the next unhit target
     currentTarget = targets[0];
-    document.querySelectorAll('.scroll-target').forEach(t => t.style.backgroundColor = '#ffcc00');
+    document.querySelectorAll('.scroll-target').forEach(t => {
+        t.style.backgroundColor = '#ffcc00';
+        t.style.border = '3px solid #ff9800';
+        t.classList.remove('active');
+    });
+    
     currentTarget.style.backgroundColor = '#4caf50';
-    currentTarget.style.border = '2px solid #2e7d32';
-    currentTarget.textContent = `→ Target ${parseInt(currentTarget.dataset.id) + 1} ←`;
+    currentTarget.style.border = '3px solid #2e7d32';
+    currentTarget.style.boxShadow = '0 0 25px rgba(76, 175, 80, 0.6)';
+    currentTarget.classList.add('active');
+    currentTarget.textContent = `🎯 Target ${parseInt(currentTarget.dataset.id) + 1} 🎯`;
 }
 
 // Check if a target is in the viewport
@@ -673,98 +1600,257 @@ function isElementInViewport(el) {
     );
 }
 
-// Show level complete message
+// Show enhanced level complete message
 function showLevelCompleteMessage() {
     const message = document.createElement('div');
     message.style.position = 'absolute';
     message.style.top = '50%';
     message.style.left = '50%';
     message.style.transform = 'translate(-50%, -50%)';
-    message.style.backgroundColor = 'rgba(76, 175, 80, 0.9)';
+    message.style.backgroundColor = 'rgba(76, 175, 80, 0.95)';
     message.style.color = 'white';
-    message.style.padding = '20px';
-    message.style.borderRadius = '8px';
+    message.style.padding = '30px';
+    message.style.borderRadius = '15px';
     message.style.fontWeight = 'bold';
     message.style.textAlign = 'center';
     message.style.zIndex = '100';
+    message.style.boxShadow = '0 8px 32px rgba(76, 175, 80, 0.3)';
+    message.style.border = '3px solid rgba(255, 255, 255, 0.3)';
+    message.style.animation = 'successPulse 0.6s ease-out';
+    
+    const levelBonus = scrollLevel * 100;
+    const timeBonus = Math.max(0, 200 - scrollTimer);
+    const perfectBonus = perfectScrolls * 50;
+    const totalBonus = levelBonus + timeBonus + perfectBonus;
+    
+    scrollScore += totalBonus;
+    scrollScoreDisplay.textContent = Math.round(scrollScore);
+    
     message.innerHTML = `
-        <h3>Level ${scrollLevel} Complete!</h3>
-        <p>All targets found!</p>
-        <p>Total scrolls: ${scrollCount}</p>
-        <p>Scroll distance: ${scrollDistance}px</p>
+        <div style="font-size: 28px; margin-bottom: 15px;">🎉 LEVEL ${scrollLevel} COMPLETE! 🎉</div>
+        <div style="font-size: 18px; margin-bottom: 10px;">All targets found!</div>
+        <div style="font-size: 16px; margin-bottom: 8px;">Time: ${scrollTimer.toFixed(1)}s</div>
+        <div style="font-size: 16px; margin-bottom: 8px;">Perfect scrolls: ${perfectScrolls}</div>
+        <div style="font-size: 16px; margin-bottom: 15px;">Combo: x${comboMultiplier.toFixed(1)}</div>
+        <div style="font-size: 20px; color: #ffd700; margin-bottom: 10px;">+${totalBonus} Bonus Points!</div>
+        <div style="font-size: 24px; color: #ffd700;">Total Score: ${Math.round(scrollScore)}</div>
     `;
     
     scrollContainer.appendChild(message);
+    
+    // Create confetti effect
+    createConfettiEffect();
     
     // Set timeout to advance to the next level
     setTimeout(() => {
         scrollLevel++;
         scrollLevelDisplay.textContent = scrollLevel;
-        targetsHit = 0;
-        targetsHitDisplay.textContent = targetsHit;
+        scrollTargetsHit = 0;
+        targetsHitDisplay.textContent = scrollTargetsHit;
+        scrollComboMultiplier = Math.min(scrollComboMultiplier + 0.1, 3); // Cap combo multiplier
+        scrollComboDisplay.textContent = `x${scrollComboMultiplier.toFixed(1)}`;
         scrollContainer.scrollTop = 0;
         generateScrollContent();
-    }, 3000);
+    }, 4000);
 }
 
-// Enhanced scroll event handler
+// Create confetti effect
+function createConfettiEffect() {
+    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#dda0dd'];
+    
+    for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.style.position = 'absolute';
+        confetti.style.width = '8px';
+        confetti.style.height = '8px';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.left = `${Math.random() * 100}%`;
+        confetti.style.top = '-10px';
+        confetti.style.borderRadius = '50%';
+        confetti.style.pointerEvents = 'none';
+        confetti.style.zIndex = '999';
+        
+        const animationDuration = 2 + Math.random() * 2;
+        const horizontalDistance = (Math.random() - 0.5) * 200;
+        
+        confetti.style.animation = `none`;
+        confetti.style.transition = `all ${animationDuration}s ease-out`;
+        confetti.style.transform = `translate(${horizontalDistance}px, 400px) rotate(${Math.random() * 720}deg)`;
+        confetti.style.opacity = '1';
+        
+        scrollContainer.appendChild(confetti);
+        
+        setTimeout(() => {
+            confetti.style.opacity = '0';
+        }, animationDuration * 1000 - 500);
+        
+        setTimeout(() => {
+            if (scrollContainer.contains(confetti)) {
+                scrollContainer.removeChild(confetti);
+            }
+        }, animationDuration * 1000);
+    }
+}
+
+// Enhanced scroll event handler with scoring and effects
 scrollContainer.addEventListener('scroll', () => {
     // Count scrolls
     scrollCount++;
-    scrollCountDisplay.textContent = scrollCount;
     
     // Track distance scrolled (absolute value of change)
     const newScrollTop = scrollContainer.scrollTop;
-    scrollDistance += Math.abs(newScrollTop - lastScrollTop);
-    scrollDistanceDisplay.textContent = Math.round(scrollDistance);
+    const scrollDelta = Math.abs(newScrollTop - lastScrollTop);
+    scrollDistance += scrollDelta;
     lastScrollTop = newScrollTop;
+    
+    // Update progress bar
+    const progressBar = scrollContainer.querySelector('.scroll-progress');
+    if (progressBar) {
+        const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+        const progress = (newScrollTop / maxScroll) * 100;
+        progressBar.style.width = `${Math.min(progress, 100)}%`;
+    }
+    
+        // Award points for smooth scrolling
+        if (scrollDelta > 0) {
+            const smoothScrollBonus = Math.min(scrollDelta * 0.1, 5);
+            scrollScore += smoothScrollBonus * scrollComboMultiplier;
+            scrollScoreDisplay.textContent = Math.round(scrollScore);
+        }
     
     // Check if current target is in viewport
     if (currentTarget && isElementInViewport(currentTarget)) {
         currentTarget.classList.add('hit');
         currentTarget.style.backgroundColor = '#9e9e9e';
-        currentTarget.style.border = '2px solid #757575';
-        currentTarget.textContent = `✓ Target ${parseInt(currentTarget.dataset.id) + 1}`;
+        currentTarget.style.border = '3px solid #757575';
+        currentTarget.style.boxShadow = '0 0 15px rgba(158, 158, 158, 0.5)';
+        currentTarget.textContent = `✅ Target ${parseInt(currentTarget.dataset.id) + 1}`;
+        
+        // Calculate score based on speed and accuracy
+        const timeBonus = Math.max(0, 100 - scrollTimer);
+        const accuracyBonus = 50;
+        const levelBonus = scrollLevel * 25;
+        const totalPoints = Math.round((timeBonus + accuracyBonus + levelBonus) * scrollComboMultiplier);
+        
+        scrollScore += totalPoints;
+        scrollScoreDisplay.textContent = Math.round(scrollScore);
         
         // Update targets hit counter
-        targetsHit++;
-        targetsHitDisplay.textContent = targetsHit;
+        scrollTargetsHit++;
+        targetsHitDisplay.textContent = scrollTargetsHit;
         
-        // Show brief feedback
+        // Check for perfect scroll (found target quickly)
+        if (scrollTimer < 5) {
+            perfectScrolls++;
+            perfectScrollsDisplay.textContent = perfectScrolls;
+            scrollComboMultiplier += 0.2;
+        }
+        
+        scrollComboDisplay.textContent = `x${scrollComboMultiplier.toFixed(1)}`;
+        
+        // Create enhanced feedback with score
         const feedback = document.createElement('div');
         feedback.style.position = 'absolute';
         feedback.style.top = '10px';
         feedback.style.left = '50%';
         feedback.style.transform = 'translateX(-50%)';
-        feedback.style.backgroundColor = 'rgba(76, 175, 80, 0.8)';
+        feedback.style.backgroundColor = 'rgba(76, 175, 80, 0.9)';
         feedback.style.color = 'white';
-        feedback.style.padding = '8px 15px';
-        feedback.style.borderRadius = '20px';
+        feedback.style.padding = '12px 20px';
+        feedback.style.borderRadius = '25px';
         feedback.style.fontWeight = 'bold';
-        feedback.textContent = `Target found! ${targetsHit}/${totalTargetsDisplay.textContent}`;
+        feedback.style.fontSize = '16px';
+        feedback.style.boxShadow = '0 4px 15px rgba(76, 175, 80, 0.3)';
+        feedback.innerHTML = `
+            <div>🎯 Target Found!</div>
+            <div style="font-size: 14px; margin-top: 4px;">+${totalPoints} points</div>
+            <div style="font-size: 12px; margin-top: 2px;">${targetsHit}/${totalTargetsDisplay.textContent}</div>
+        `;
         feedback.style.zIndex = '100';
         
         scrollContainer.appendChild(feedback);
-        setTimeout(() => scrollContainer.removeChild(feedback), 1500);
+        
+        // Create particle explosion effect
+        createParticleExplosion(currentTarget);
+        
+        setTimeout(() => {
+            if (scrollContainer.contains(feedback)) {
+                scrollContainer.removeChild(feedback);
+            }
+        }, 2000);
         
         // Activate next target
-        setTimeout(activateNextTarget, 500);
+        setTimeout(activateNextTarget, 800);
     }
 });
+
+// Create particle explosion effect
+function createParticleExplosion(element) {
+    const rect = element.getBoundingClientRect();
+    const containerRect = scrollContainer.getBoundingClientRect();
+    
+    for (let i = 0; i < 8; i++) {
+        const particle = document.createElement('div');
+        particle.style.position = 'absolute';
+        particle.style.width = '6px';
+        particle.style.height = '6px';
+        particle.style.backgroundColor = '#ffd700';
+        particle.style.borderRadius = '50%';
+        particle.style.left = `${rect.left - containerRect.left + rect.width/2}px`;
+        particle.style.top = `${rect.top - containerRect.top + rect.height/2}px`;
+        particle.style.pointerEvents = 'none';
+        particle.style.zIndex = '999';
+        
+        const angle = (i / 8) * Math.PI * 2;
+        const velocity = 50 + Math.random() * 30;
+        const vx = Math.cos(angle) * velocity;
+        const vy = Math.sin(angle) * velocity;
+        
+        particle.style.animation = `none`;
+        particle.style.transform = `translate(${vx}px, ${vy}px)`;
+        particle.style.transition = 'all 0.8s ease-out';
+        particle.style.opacity = '1';
+        
+        scrollContainer.appendChild(particle);
+        
+        setTimeout(() => {
+            particle.style.opacity = '0';
+            particle.style.transform = `translate(${vx * 2}px, ${vy * 2}px) scale(0)`;
+        }, 50);
+        
+        setTimeout(() => {
+            if (scrollContainer.contains(particle)) {
+                scrollContainer.removeChild(particle);
+            }
+        }, 800);
+    }
+}
 
 // Enhanced reset function
 resetScrolls.addEventListener('click', () => {
     scrollCount = 0;
     scrollDistance = 0;
     scrollLevel = 1;
-    targetsHit = 0;
+    scrollTargetsHit = 0;
     lastScrollTop = 0;
+    scrollScore = 0;
+    scrollTimer = 0;
+    scrollComboMultiplier = 1;
+    perfectScrolls = 0;
+    
+    // Clear timer
+    if (scrollTimerInterval) {
+        clearInterval(scrollTimerInterval);
+        scrollTimerInterval = null;
+    }
     
     // Update displays
-    scrollCountDisplay.textContent = scrollCount;
-    scrollDistanceDisplay.textContent = scrollDistance;
     scrollLevelDisplay.textContent = scrollLevel;
-    targetsHitDisplay.textContent = targetsHit;
+    scrollScoreDisplay.textContent = scrollScore;
+    scrollComboDisplay.textContent = `x${scrollComboMultiplier.toFixed(1)}`;
+    targetsHitDisplay.textContent = scrollTargetsHit;
+    perfectScrollsDisplay.textContent = perfectScrolls;
+    scrollTimerDisplay.textContent = '0.0s';
     
     // Reset scroll position
     scrollContainer.scrollTop = 0;
@@ -1254,323 +2340,655 @@ document.getElementById('text-selection-area').parentNode.appendChild(buttonCont
 shuffleArray(phrases);
 setNewPhraseToSelect();
 
-// DragonDrop Game - Dragon-themed drag and drop game for mouse practice
-
-// Set up game container
-const gameContainer = document.createElement('div');
-gameContainer.id = 'dragon-drop-game';
-gameContainer.style.fontFamily = 'Arial, sans-serif';
-gameContainer.style.width = '100%';
-gameContainer.style.maxWidth = '800px';
-gameContainer.style.margin = '0 auto';
-gameContainer.style.padding = '20px';
-gameContainer.style.boxSizing = 'border-box';
-gameContainer.style.userSelect = 'none'; // Prevent text selection
-
-// Add game title
-const gameTitle = document.createElement('h2');
-gameTitle.textContent = '🐉 DragonDrop';
-gameTitle.style.textAlign = 'center';
-gameTitle.style.color = '#8b5cf6';
-gameTitle.style.marginBottom = '20px';
-gameContainer.appendChild(gameTitle);
-
-// Create game info section
-const gameInfo = document.createElement('div');
-gameInfo.style.display = 'flex';
-gameInfo.style.justifyContent = 'space-between';
-gameInfo.style.marginBottom = '20px';
-gameContainer.appendChild(gameInfo);
-
-// Score display
-const scoreDisplay = document.createElement('div');
-scoreDisplay.innerHTML = '<strong>Score:</strong> <span id="game-score">0</span>';
-scoreDisplay.style.fontSize = '18px';
-gameInfo.appendChild(scoreDisplay);
-
-// Level display
-const levelDisplay = document.createElement('div');
-levelDisplay.innerHTML = '<strong>Level:</strong> <span id="game-level">1</span>';
-levelDisplay.style.fontSize = '18px';
-gameInfo.appendChild(levelDisplay);
-
-// Timer display
-const timerDisplay = document.createElement('div');
-timerDisplay.innerHTML = '<strong>Time:</strong> <span id="game-timer">60</span>s';
-timerDisplay.style.fontSize = '18px';
-gameInfo.appendChild(timerDisplay);
-
-// Create game area
-const gameArea = document.createElement('div');
-gameArea.style.position = 'relative';
-gameArea.style.display = 'flex';
-gameArea.style.flexDirection = 'column';
-gameArea.style.gap = '20px';
-gameArea.style.height = '500px';
-gameArea.style.backgroundColor = '#f3f4f6';
-gameArea.style.borderRadius = '8px';
-gameArea.style.padding = '20px';
-gameContainer.appendChild(gameArea);
-
-// Create dragon staging area (where dragons start)
-const dragonStaging = document.createElement('div');
-dragonStaging.style.display = 'flex';
-dragonStaging.style.flexWrap = 'wrap';
-dragonStaging.style.gap = '15px';
-dragonStaging.style.alignItems = 'center';
-dragonStaging.style.justifyContent = 'center';
-dragonStaging.style.minHeight = '100px';
-dragonStaging.style.padding = '10px';
-dragonStaging.style.backgroundColor = '#e5e7eb';
-dragonStaging.style.borderRadius = '8px';
-gameArea.appendChild(dragonStaging);
-
-// Create nests area (drop zones)
-const nestsArea = document.createElement('div');
-nestsArea.style.flex = '1';
-nestsArea.style.display = 'flex';
-nestsArea.style.flexWrap = 'wrap';
-nestsArea.style.gap = '20px';
-nestsArea.style.alignItems = 'center';
-nestsArea.style.justifyContent = 'center';
-nestsArea.style.padding = '10px';
-gameArea.appendChild(nestsArea);
-
-// Create controls
-const controls = document.createElement('div');
-controls.style.display = 'flex';
-controls.style.justifyContent = 'center';
-controls.style.gap = '15px';
-controls.style.marginTop = '20px';
-gameContainer.appendChild(controls);
-
-// Start button
-const startButton = document.createElement('button');
-startButton.textContent = 'Start Game';
-startButton.style.padding = '10px 20px';
-startButton.style.backgroundColor = '#8b5cf6';
-startButton.style.color = 'white';
-startButton.style.border = 'none';
-startButton.style.borderRadius = '5px';
-startButton.style.cursor = 'pointer';
-controls.appendChild(startButton);
-
-// Reset button
-const resetButton = document.createElement('button');
-resetButton.textContent = 'Reset Game';
-resetButton.style.padding = '10px 20px';
-resetButton.style.backgroundColor = '#9ca3af';
-resetButton.style.color = 'white';
-resetButton.style.border = 'none';
-resetButton.style.borderRadius = '5px';
-resetButton.style.cursor = 'pointer';
-controls.appendChild(resetButton);
-
-const targetDiv = document.getElementById('dragondrop'); // Replace 'myDiv' with your actual div ID
-targetDiv.appendChild(gameContainer);
+// Target Practice Arena - Comprehensive Mouse Skills Training
 
 // Game variables
-let score = 0;
-let level = 1;
-let timer = 60;
-let gameInterval;
-let dragonsInPlay = 0;
-let matchesNeeded = 3;
-let dragonsMatched = 0;
+let arenaScore = 0;
+let arenaLevel = 1;
+let arenaTimer = 0;
 let gameActive = false;
+let currentSkill = 'click';
+let targetsHit = 0;
+let totalTargets = 0;
+let comboMultiplier = 1;
+let perfectHits = 0;
+let gameInterval = null;
+let targetSpawnInterval = null;
+let lives = 3;
+let maxLives = 3;
 
-// Dragon types with colors
-const dragonTypes = [
-    { type: 'fire', emoji: '🔥', color: '#ef4444' },
-    { type: 'water', emoji: '💧', color: '#3b82f6' },
-    { type: 'earth', emoji: '🌿', color: '#10b981' },
-    { type: 'air', emoji: '💨', color: '#d1d5db' },
-    { type: 'lightning', emoji: '⚡', color: '#fbbf24' }
-];
+// Skill tracking
+const skillStats = {
+    click: { hits: 0, misses: 0, total: 0 },
+    doubleClick: { hits: 0, misses: 0, total: 0 },
+    rightClick: { hits: 0, misses: 0, total: 0 },
+    drag: { hits: 0, misses: 0, total: 0 },
+    scroll: { hits: 0, misses: 0, total: 0 },
+    textSelection: { hits: 0, misses: 0, total: 0 },
+    mix: { hits: 0, misses: 0, total: 0 }
+};
 
-// Function to create a dragon element
-function createDragon(dragonType) {
-    const dragon = document.createElement('div');
-    dragon.className = 'dragon';
-    dragon.dataset.type = dragonType.type;
-    dragon.draggable = true;
-    dragon.style.width = '60px';
-    dragon.style.height = '60px';
-    dragon.style.backgroundColor = dragonType.color;
-    dragon.style.borderRadius = '50%';
-    dragon.style.display = 'flex';
-    dragon.style.alignItems = 'center';
-    dragon.style.justifyContent = 'center';
-    dragon.style.fontSize = '24px';
-    dragon.style.cursor = 'grab';
-    dragon.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
-    dragon.style.transform = 'scale(1)';
-    dragon.style.transition = 'transform 0.2s, box-shadow 0.2s';
-     
-    // Dragon face
-    const dragonFace = document.createElement('div');
-    dragonFace.innerHTML = `${dragonType.emoji}`;
-    dragonFace.style.textAlign = 'center';
-    dragon.appendChild(dragonFace);
+// Create the arena container
+const arenaContainer = document.createElement('div');
+arenaContainer.className = 'arena-container';
+
+// Add background
+const arenaBackground = document.createElement('div');
+arenaBackground.className = 'arena-background';
+arenaContainer.appendChild(arenaBackground);
+
+// Create stats display
+const statsContainer = document.createElement('div');
+statsContainer.className = 'arena-stats';
+statsContainer.innerHTML = `
+    <div class="stat-item">
+        <div class="stat-label">Score</div>
+        <div class="stat-value" id="arena-score">0</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-label">Level</div>
+        <div class="stat-value" id="arena-level">1</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-label">Combo</div>
+        <div class="stat-value" id="arena-combo">x1</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-label">Lives</div>
+        <div class="lives-display" id="arena-lives">
+            <div class="life-heart"></div>
+            <div class="life-heart"></div>
+            <div class="life-heart"></div>
+        </div>
+    </div>
+`;
+
+// Create controls
+const controlsContainer = document.createElement('div');
+controlsContainer.className = 'arena-controls';
+controlsContainer.innerHTML = `
+    <button class="arena-btn primary" id="start-arena">Start Training</button>
+    <button class="arena-btn secondary" id="reset-arena">Reset</button>
+    <button class="arena-btn secondary" id="skill-selector">Skill: Click</button>
+`;
+
+// Create skill indicator
+const skillIndicator = document.createElement('div');
+skillIndicator.className = 'skill-indicator click';
+skillIndicator.textContent = 'CLICK TARGETS';
+arenaContainer.appendChild(skillIndicator);
+
+// Append to main container
+const targetDiv = document.getElementById('target-practice-arena');
+targetDiv.appendChild(statsContainer);
+targetDiv.appendChild(controlsContainer);
+targetDiv.appendChild(arenaContainer);
+
+// Get references to elements
+const scoreDisplay = document.getElementById('arena-score');
+const levelDisplay = document.getElementById('arena-level');
+const comboDisplay = document.getElementById('arena-combo');
+const livesDisplay = document.getElementById('arena-lives');
+const startBtn = document.getElementById('start-arena');
+const resetBtn = document.getElementById('reset-arena');
+const skillBtn = document.getElementById('skill-selector');
+
+// Skill types and their properties
+const skillTypes = {
+    click: { name: 'Click', color: '#e74c3c', emoji: '🎯' },
+    doubleClick: { name: 'Double-Click', color: '#f39c12', emoji: '⚡' },
+    rightClick: { name: 'Right-Click', color: '#9b59b6', emoji: '🖱️' },
+    drag: { name: 'Drag & Drop', color: '#27ae60', emoji: '🖐️' },
+    scroll: { name: 'Scroll', color: '#3498db', emoji: '📜' },
+    textSelection: { name: 'Text Selection', color: '#e67e22', emoji: '📝' },
+    mix: { name: 'Mix Mode', color: '#8e44ad', emoji: '🎲' }
+};
+
+let currentSkillIndex = 0;
+const skillKeys = Object.keys(skillTypes);
+
+// Function to create different types of targets
+function createTarget(type, x, y) {
+    const target = document.createElement('div');
+    target.className = `target ${type}-target`;
+    target.style.left = `${x}px`;
+    target.style.top = `${y}px`;
     
-    // Drag events
-    dragon.addEventListener('dragstart', function(e) {
-        this.style.opacity = '0.5';
-        // Store dragon type in dataTransfer
-        e.dataTransfer.setData('text/plain', this.dataset.type);
-        // Set a custom drag image (optional)
-        const dragImg = new Image();
-        dragImg.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"><circle cx="30" cy="30" r="30" fill="' + dragonType.color + '"/></svg>';
-        e.dataTransfer.setDragImage(dragImg, 30, 30);
-    });
+    const skill = skillTypes[type];
+    const size = Math.max(40, 80 - (arenaLevel * 5));
+    target.style.width = `${size}px`;
+    target.style.height = `${size}px`;
+    target.style.fontSize = `${Math.max(12, size / 4)}px`;
     
-    dragon.addEventListener('dragend', function() {
-        this.style.opacity = '1';
-    });
+    // Set target content based on type
+    switch (type) {
+        case 'click':
+            target.textContent = 'CLICK';
+            target.addEventListener('click', () => hitTarget(target, type));
+            break;
+        case 'doubleClick':
+            target.textContent = 'DOUBLE';
+            target.addEventListener('dblclick', () => hitTarget(target, type));
+            break;
+        case 'rightClick':
+            target.textContent = 'RIGHT';
+            target.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                hitTarget(target, type);
+            });
+            break;
+        case 'drag':
+            target.textContent = 'DRAG';
+            target.draggable = true;
+            target.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', 'drag-target');
+                target.style.opacity = '0.5';
+            });
+            target.addEventListener('dragend', () => {
+                target.style.opacity = '1';
+            });
+            break;
+        case 'scroll':
+            target.textContent = 'SCROLL';
+            target.style.cursor = 'default';
+            break;
+        case 'textSelection':
+            target.textContent = 'TEXT';
+            target.style.cursor = 'text';
+            break;
+        case 'mix':
+            target.textContent = 'MIX';
+            target.style.cursor = 'pointer';
+            break;
+    }
     
-    // Visual feedback on hover
-    dragon.addEventListener('mouseenter', function() {
-        this.style.transform = 'scale(1.1)';
-        this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
-    });
+    // Add movement for some targets
+    if (Math.random() < 0.3) {
+        addTargetMovement(target);
+    }
     
-    dragon.addEventListener('mouseleave', function() {
-        this.style.transform = 'scale(1)';
-        this.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
-    });
+    // Add timeout for targets
+    setTimeout(() => {
+        if (target.parentNode) {
+            missTarget(target, type);
+            target.remove();
+        }
+    }, 3000 + (arenaLevel * 500));
     
-    return dragon;
+    arenaContainer.appendChild(target);
+    totalTargets++;
+    return target;
 }
 
-// Function to create a nest (drop zone)
-function createNest(dragonType) {
-    const nest = document.createElement('div');
-    nest.className = 'nest';
-    nest.dataset.type = dragonType.type;
-    nest.style.width = '50px';
-    nest.style.height = '50px';
-    nest.style.borderRadius = '50%';
-    nest.style.backgroundColor = '#f3f4f6';
-    nest.style.border = `3px dashed ${dragonType.color}`;
-    nest.style.display = 'flex';
-    nest.style.flexDirection = 'column';
-    nest.style.alignItems = 'center';
-    nest.style.justifyContent = 'center';
-    nest.style.position = 'relative';
+// Function to add movement to targets
+function addTargetMovement(target) {
+    const speed = 1 + (arenaLevel * 0.5);
+    const direction = Math.random() * Math.PI * 2;
+    let vx = Math.cos(direction) * speed;
+    let vy = Math.sin(direction) * speed;
     
-    // Nest label
-    const nestLabel = document.createElement('div');
-    nestLabel.innerHTML = `${dragonType.emoji}<div>${dragonType.type} nest</div>`;
-    nestLabel.style.fontSize = '12px';
-    nestLabel.style.textAlign = 'center';
-    nestLabel.style.color = '#6b7280';
-    nest.appendChild(nestLabel);
-    
-    // Highlight on hover
-    nest.addEventListener('mouseenter', function() {
-        if (!this.classList.contains('filled')) {
-            this.style.backgroundColor = '#e5e7eb';
+    const move = () => {
+        if (!target.parentNode) return;
+        
+        const rect = target.getBoundingClientRect();
+        const containerRect = arenaContainer.getBoundingClientRect();
+        
+        let newX = parseInt(target.style.left) + vx;
+        let newY = parseInt(target.style.top) + vy;
+        
+        // Bounce off walls
+        if (newX <= 0 || newX >= containerRect.width - rect.width) {
+            vx = -vx;
+            newX = Math.max(0, Math.min(newX, containerRect.width - rect.width));
         }
-    });
-    
-    nest.addEventListener('mouseleave', function() {
-        if (!this.classList.contains('filled')) {
-            this.style.backgroundColor = '#f3f4f6';
+        if (newY <= 0 || newY >= containerRect.height - rect.height) {
+            vy = -vy;
+            newY = Math.max(0, Math.min(newY, containerRect.height - rect.height));
         }
-    });
+        
+        target.style.left = `${newX}px`;
+        target.style.top = `${newY}px`;
+        
+        requestAnimationFrame(move);
+    };
     
-    // Drop events
-    nest.addEventListener('dragover', function(e) {
+    move();
+}
+
+// Function to create drop zones for drag targets
+function createDropZone(x, y) {
+    const dropZone = document.createElement('div');
+    dropZone.className = 'drop-zone';
+    dropZone.style.left = `${x}px`;
+    dropZone.style.top = `${y}px`;
+    dropZone.style.width = '100px';
+    dropZone.style.height = '100px';
+    dropZone.textContent = 'DROP HERE';
+    
+    dropZone.addEventListener('dragover', (e) => {
         e.preventDefault();
-        if (!this.classList.contains('filled')) {
-            this.style.backgroundColor = '#e5e7eb';
-            this.style.borderStyle = 'solid';
-        }
+        dropZone.classList.add('highlight');
     });
     
-    nest.addEventListener('dragleave', function() {
-        if (!this.classList.contains('filled')) {
-            this.style.backgroundColor = '#f3f4f6';
-            this.style.borderStyle = 'dashed';
-        }
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('highlight');
     });
     
-    nest.addEventListener('drop', function(e) {
+    dropZone.addEventListener('drop', (e) => {
         e.preventDefault();
+        dropZone.classList.remove('highlight');
+        dropZone.classList.add('success');
         
-        if (this.classList.contains('filled')) {
-            return; // Nest already has a dragon
+        // Find the dragged target
+        const draggedTarget = arenaContainer.querySelector('.drag-target[style*="opacity: 0.5"]');
+        if (draggedTarget) {
+            hitTarget(draggedTarget, 'drag');
+            draggedTarget.remove();
         }
         
-        const dragonType = e.dataTransfer.getData('text/plain');
+        setTimeout(() => {
+            dropZone.classList.remove('success');
+            dropZone.remove();
+        }, 1000);
+    });
+    
+    arenaContainer.appendChild(dropZone);
+    return dropZone;
+}
+
+// Function to create scroll challenge
+function createScrollChallenge(x, y) {
+    const scrollContainer = document.createElement('div');
+    scrollContainer.className = 'scroll-challenge';
+    scrollContainer.style.left = `${x}px`;
+    scrollContainer.style.top = `${y}px`;
+    
+    const scrollContent = document.createElement('div');
+    scrollContent.className = 'scroll-content';
+    
+    // Create scroll items
+    for (let i = 0; i < 10; i++) {
+        const item = document.createElement('div');
+        item.className = 'scroll-item';
+        item.textContent = `Item ${i + 1}`;
+        item.style.backgroundColor = i === 5 ? '#e74c3c' : '#3498db';
+        scrollContent.appendChild(item);
+    }
+    
+    scrollContainer.appendChild(scrollContent);
+    
+    // Add scroll event listener
+    let scrolled = false;
+    scrollContainer.addEventListener('scroll', () => {
+        if (!scrolled && scrollContainer.scrollTop > 100) {
+            scrolled = true;
+            hitTarget(scrollContainer, 'scroll');
+            setTimeout(() => scrollContainer.remove(), 1000);
+        }
+    });
+    
+    arenaContainer.appendChild(scrollContainer);
+    return scrollContainer;
+}
+
+// Function to create text selection challenge
+function createTextSelectionChallenge(x, y) {
+    const textContainer = document.createElement('div');
+    textContainer.className = 'text-selection-challenge';
+    textContainer.style.left = `${x}px`;
+    textContainer.style.top = `${y}px`;
+    
+    // Create text with selectable phrases
+    const phrases = [
+        'select this text',
+        'highlight me',
+        'choose this phrase',
+        'pick this word',
+        'mark this text',
+        'select the target',
+        'find this text',
+        'click and drag here'
+    ];
+    
+    const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+    const sentences = [
+        `This is a paragraph with some text. Try to ${randomPhrase} with your mouse.`,
+        `Read this carefully and ${randomPhrase} to practice selection skills.`,
+        `In this exercise, you need to ${randomPhrase} to complete the task.`,
+        `Look at this text and ${randomPhrase} to demonstrate your skills.`
+    ];
+    
+    const randomSentence = sentences[Math.floor(Math.random() * sentences.length)];
+    const parts = randomSentence.split(randomPhrase);
+    
+    textContainer.innerHTML = `
+        ${parts[0]}<span class="selectable-text" data-phrase="${randomPhrase}">${randomPhrase}</span>${parts[1]}
+        <div class="text-selection-progress"></div>
+    `;
+    
+    // Add selection event listener
+    const selectableText = textContainer.querySelector('.selectable-text');
+    let selected = false;
+    
+    // Use the same selection detection as the main text selection game
+    const selectionChangeHandler = () => {
+        if (selected) return;
         
-        // Check if the dragon matches the nest
-        if (dragonType === this.dataset.type) {
-            this.style.backgroundColor = '#d1fae5'; // Success color
-            this.style.borderStyle = 'solid';
-            this.classList.add('filled');
+        const selection = window.getSelection();
+        if (selection.toString() === selectableText.textContent) {
+            selected = true;
+            selectableText.classList.add('selected');
+            hitTarget(textContainer, 'textSelection');
+            setTimeout(() => textContainer.remove(), 1000);
             
-            // Create success indicator
-            const successIndicator = document.createElement('div');
-            successIndicator.textContent = '✓';
-            successIndicator.style.position = 'absolute';
-            successIndicator.style.top = '5px';
-            successIndicator.style.right = '5px';
-            successIndicator.style.backgroundColor = '#10b981';
-            successIndicator.style.color = 'white';
-            successIndicator.style.width = '20px';
-            successIndicator.style.height = '20px';
-            successIndicator.style.borderRadius = '50%';
-            successIndicator.style.display = 'flex';
-            successIndicator.style.alignItems = 'center';
-            successIndicator.style.justifyContent = 'center';
-            this.appendChild(successIndicator);
+            // Clean up intervals and event listeners
+            if (textContainer.progressInterval) {
+                clearInterval(textContainer.progressInterval);
+            }
+            document.removeEventListener('selectionchange', selectionChangeHandler);
+        }
+    };
+    
+    // Add the selection change listener
+    document.addEventListener('selectionchange', selectionChangeHandler);
+    
+    // Add progress bar animation
+    const progressBar = textContainer.querySelector('.text-selection-progress');
+    const totalTime = 8000 + (arenaLevel * 1000); // 8-12 seconds depending on level
+    const startTime = Date.now();
+    
+    const progressInterval = setInterval(() => {
+        if (selected) {
+            clearInterval(progressInterval);
+            return;
+        }
+        
+        const elapsed = Date.now() - startTime;
+        const progress = (elapsed / totalTime) * 100;
+        progressBar.style.width = `${Math.min(progress, 100)}%`;
+        
+        if (progress >= 100) {
+            clearInterval(progressInterval);
+        }
+    }, 50);
+    
+    // Store progress interval reference for cleanup
+    textContainer.progressInterval = progressInterval;
+    
+    // Add timeout - longer for text selection to give students more time
+    setTimeout(() => {
+        if (textContainer.parentNode && !selected) {
+            clearInterval(progressInterval);
+            missTarget(textContainer, 'textSelection');
+            textContainer.remove();
+            // Clean up event listener
+            document.removeEventListener('selectionchange', selectionChangeHandler);
+        }
+    }, totalTime);
+    
+    arenaContainer.appendChild(textContainer);
+    return textContainer;
+}
+
+// Function to spawn targets
+function spawnTargets() {
+    if (!gameActive) return;
+    
+    const containerRect = arenaContainer.getBoundingClientRect();
+    const spawnCount = 1 + Math.floor(arenaLevel / 3);
+    
+    for (let i = 0; i < spawnCount; i++) {
+        let x, y;
+        
+        // Calculate proper bounds based on skill type
+        if (currentSkill === 'textSelection') {
+            // Text selection challenges are 250px wide and 120px tall, with 20px padding
+            x = Math.random() * (containerRect.width - 250 - 40) + 20;
+            y = Math.random() * (containerRect.height - 120 - 40) + 20;
+        } else {
+            // Regular targets are 100px
+            x = Math.random() * (containerRect.width - 100);
+            y = Math.random() * (containerRect.height - 100);
+        }
+        
+        if (currentSkill === 'drag') {
+            createTarget('drag', x, y);
+            // Create a drop zone nearby
+            setTimeout(() => {
+                const dropX = Math.random() * (containerRect.width - 100);
+                const dropY = Math.random() * (containerRect.height - 100);
+                createDropZone(dropX, dropY);
+            }, 500);
+        } else if (currentSkill === 'scroll') {
+            createScrollChallenge(x, y);
+        } else if (currentSkill === 'textSelection') {
+            createTextSelectionChallenge(x, y);
+        } else if (currentSkill === 'mix') {
+            // In mix mode, randomly choose a skill
+            const mixSkills = ['click', 'doubleClick', 'rightClick', 'drag', 'scroll', 'textSelection'];
+            const randomSkill = mixSkills[Math.floor(Math.random() * mixSkills.length)];
             
-            // Remove the dragon from the staging area
-            const draggedDragon = document.querySelector(`.dragon[data-type="${dragonType}"]`);
-            if (draggedDragon) {
-                dragonStaging.removeChild(draggedDragon);
+            // Recalculate bounds for text selection in mix mode
+            let mixX = x, mixY = y;
+            if (randomSkill === 'textSelection') {
+                mixX = Math.random() * (containerRect.width - 250 - 40) + 20;
+                mixY = Math.random() * (containerRect.height - 120 - 40) + 20;
             }
             
-            // Update score and matched count
-            score += 10 * level;
-            document.getElementById('game-score').textContent = score;
-            dragonsMatched++;
-            
-            // Create a mini-dragon in the nest
-            const miniDragon = document.createElement('div');
-            miniDragon.style.width = '20px';
-            miniDragon.style.height = '20px';
-            miniDragon.style.backgroundColor = dragonTypes.find(d => d.type === dragonType).color;
-            miniDragon.style.borderRadius = '50%';
-            miniDragon.style.display = 'flex';
-            miniDragon.style.alignItems = 'center';
-            miniDragon.style.justifyContent = 'center';
-            miniDragon.style.fontSize = '20px';
-            miniDragon.innerHTML = dragonTypes.find(d => d.type === dragonType).emoji;
-            miniDragon.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
-            miniDragon.style.marginTop = '5px';
-            this.appendChild(miniDragon);
-            
-            // Check if level is complete
-            if (dragonsMatched >= matchesNeeded) {
-                levelUp();
+            if (randomSkill === 'drag') {
+                createTarget('drag', mixX, mixY);
+                setTimeout(() => {
+                    const dropX = Math.random() * (containerRect.width - 100);
+                    const dropY = Math.random() * (containerRect.height - 100);
+                    createDropZone(dropX, dropY);
+                }, 500);
+            } else if (randomSkill === 'scroll') {
+                createScrollChallenge(mixX, mixY);
+            } else if (randomSkill === 'textSelection') {
+                createTextSelectionChallenge(mixX, mixY);
+            } else {
+                createTarget(randomSkill, mixX, mixY);
             }
         } else {
-            // Wrong match feedback
-            this.style.backgroundColor = '#fee2e2'; // Error color
-            setTimeout(() => {
-                this.style.backgroundColor = '#f3f4f6';
-                this.style.borderStyle = 'dashed';
-            }, 500);
-            
-            // Penalty
-            score = Math.max(0, score - 5);
-            document.getElementById('game-score').textContent = score;
+            createTarget(currentSkill, x, y);
+        }
+    }
+}
+
+// Function to hit a target
+function hitTarget(target, type) {
+    if (!target.parentNode) return;
+    
+    targetsHit++;
+    
+    // For mix mode, track the actual skill used, not 'mix'
+    const actualType = currentSkill === 'mix' ? type : type;
+    skillStats[actualType].hits++;
+    skillStats[actualType].total++;
+    
+    // Calculate score
+    const baseScore = 100;
+    const levelBonus = arenaLevel * 25;
+    const comboBonus = comboMultiplier * 50;
+    const mixBonus = currentSkill === 'mix' ? 50 : 0; // Extra points for mix mode
+    const totalScore = Math.round((baseScore + levelBonus + comboBonus + mixBonus) * (1 + arenaLevel * 0.1));
+    
+    arenaScore += totalScore;
+    comboMultiplier = Math.min(comboMultiplier + 0.2, 5);
+    
+    // Create hit effect
+    const scoreText = currentSkill === 'mix' ? `+${totalScore} (${actualType})` : `+${totalScore}`;
+    createHitEffect(target, scoreText);
+    createParticleExplosion(target);
+    
+    // Update displays
+    updateDisplays();
+    
+    // Remove target
+    target.classList.add('hit');
+    setTimeout(() => {
+        if (target.parentNode) {
+            target.remove();
+        }
+    }, 500);
+    
+    // Check for level up
+    if (targetsHit % 10 === 0) {
+        levelUp();
+    }
+}
+
+// Function to miss a target
+function missTarget(target, type) {
+    // For mix mode, track the actual skill used, not 'mix'
+    const actualType = currentSkill === 'mix' ? type : type;
+    skillStats[actualType].misses++;
+    skillStats[actualType].total++;
+    comboMultiplier = Math.max(1, comboMultiplier - 0.5);
+    
+    // Lose a life
+    loseLife();
+    updateDisplays();
+}
+
+// Function to lose a life
+function loseLife() {
+    lives--;
+    if (lives <= 0) {
+        gameOver();
+    }
+}
+
+// Function to handle game over
+function gameOver() {
+    gameActive = false;
+    clearInterval(gameInterval);
+    clearInterval(targetSpawnInterval);
+    
+    // Create game over overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'game-over-overlay';
+    overlay.innerHTML = `
+        <div class="game-over-title">GAME OVER</div>
+        <div class="game-over-stats">
+            <h3>Final Score: ${Math.round(arenaScore)}</h3>
+            <h3>Level Reached: ${arenaLevel}</h3>
+            <h3>Targets Hit: ${targetsHit}</h3>
+            <h3>Max Combo: x${comboMultiplier.toFixed(1)}</h3>
+        </div>
+        <button class="game-over-btn" onclick="restartGame()">Play Again</button>
+    `;
+    
+    arenaContainer.appendChild(overlay);
+}
+
+// Function to restart game
+function restartGame() {
+    // Remove game over overlay
+    const overlay = arenaContainer.querySelector('.game-over-overlay');
+    if (overlay) {
+        overlay.remove();
+    }
+    
+    // Reset game state
+    resetGame();
+}
+
+// Function to create hit effect
+function createHitEffect(target, text) {
+    const feedback = document.createElement('div');
+    feedback.className = 'hit-feedback';
+    feedback.textContent = text;
+    feedback.style.left = target.style.left;
+    feedback.style.top = target.style.top;
+    arenaContainer.appendChild(feedback);
+    
+    setTimeout(() => {
+        if (feedback.parentNode) {
+            feedback.remove();
+        }
+    }, 1000);
+}
+
+// Function to create particle explosion
+function createParticleExplosion(target) {
+    const rect = target.getBoundingClientRect();
+    const containerRect = arenaContainer.getBoundingClientRect();
+    
+    for (let i = 0; i < 8; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = `${rect.left - containerRect.left + rect.width/2}px`;
+        particle.style.top = `${rect.top - containerRect.top + rect.height/2}px`;
+        
+        const angle = (i / 8) * Math.PI * 2;
+        const velocity = 30 + Math.random() * 20;
+        const vx = Math.cos(angle) * velocity;
+        const vy = Math.sin(angle) * velocity;
+        
+        particle.style.transform = `translate(${vx}px, ${vy}px)`;
+        particle.style.transition = 'all 0.8s ease-out';
+        particle.style.opacity = '1';
+        
+        arenaContainer.appendChild(particle);
+        
+        setTimeout(() => {
+            particle.style.opacity = '0';
+            particle.style.transform = `translate(${vx * 2}px, ${vy * 2}px) scale(0)`;
+        }, 50);
+        
+        setTimeout(() => {
+            if (particle.parentNode) {
+                particle.remove();
+            }
+        }, 800);
+    }
+}
+
+// Function to update displays
+function updateDisplays() {
+    scoreDisplay.textContent = Math.round(arenaScore);
+    levelDisplay.textContent = arenaLevel;
+    comboDisplay.textContent = `x${comboMultiplier.toFixed(1)}`;
+    
+    // Update lives display
+    const hearts = livesDisplay.querySelectorAll('.life-heart');
+    hearts.forEach((heart, index) => {
+        if (index < lives) {
+            heart.classList.remove('lost');
+        } else {
+            heart.classList.add('lost');
         }
     });
+}
+
+// Function to level up
+function levelUp() {
+    arenaLevel++;
+    levelDisplay.textContent = arenaLevel;
     
-    return nest;
+    // Show level up message
+    const message = document.createElement('div');
+    message.style.position = 'absolute';
+    message.style.top = '50%';
+    message.style.left = '50%';
+    message.style.transform = 'translate(-50%, -50%)';
+    message.style.backgroundColor = 'rgba(46, 204, 113, 0.9)';
+    message.style.color = 'white';
+    message.style.padding = '20px 40px';
+    message.style.borderRadius = '15px';
+    message.style.fontSize = '24px';
+    message.style.fontWeight = 'bold';
+    message.style.zIndex = '1000';
+    message.textContent = `Level ${arenaLevel}!`;
+    
+    arenaContainer.appendChild(message);
+    
+    setTimeout(() => {
+        if (message.parentNode) {
+            message.remove();
+        }
+    }, 2000);
 }
 
 // Function to start the game
@@ -1578,210 +2996,93 @@ function startGame() {
     if (gameActive) return;
     
     gameActive = true;
-    score = 0;
-    level = 1;
-    timer = 60;
-    dragonsMatched = 0;
+    arenaTimer = 0;
+    targetsHit = 0;
+    totalTargets = 0;
     
-    // Update display
-    document.getElementById('game-score').textContent = score;
-    document.getElementById('game-level').textContent = level;
-    document.getElementById('game-timer').textContent = timer;
+    // Clear arena
+    arenaContainer.innerHTML = '';
+    arenaContainer.appendChild(arenaBackground);
+    arenaContainer.appendChild(skillIndicator);
     
-    // Clear areas
-    dragonStaging.innerHTML = '';
-    nestsArea.innerHTML = '';
-    
-    // Set up level
-    setupLevel();
+    // Start spawning targets - much slower for text selection
+    const baseSpawnDelay = (currentSkill === 'textSelection' || currentSkill === 'mix') ? 6000 : 2000; // 6 seconds for text selection/mix, 2 seconds for others
+    const levelReduction = (currentSkill === 'textSelection' || currentSkill === 'mix') ? 300 : 100; // Less aggressive reduction for text selection/mix
+    targetSpawnInterval = setInterval(spawnTargets, baseSpawnDelay - (arenaLevel * levelReduction));
     
     // Start timer
     gameInterval = setInterval(() => {
-        timer--;
-        document.getElementById('game-timer').textContent = timer;
-        
-        if (timer <= 0) {
-            endGame();
-        }
+        arenaTimer++;
     }, 1000);
     
-    startButton.disabled = true;
-    startButton.style.backgroundColor = '#9ca3af';
+    startBtn.textContent = 'Training...';
+    startBtn.disabled = true;
 }
 
-// Function to set up a level
-function setupLevel() {
-    // Clear existing dragons and nests
-    dragonStaging.innerHTML = '';
-    nestsArea.innerHTML = '';
-    
-    // Determine number of dragon types for this level
-    const typesForLevel = Math.min(dragonTypes.length, 2 + Math.floor(level / 2));
-    
-    // Select random dragon types for this level
-    const shuffledTypes = [...dragonTypes].sort(() => 0.5 - Math.random());
-    const selectedTypes = shuffledTypes.slice(0, typesForLevel);
-    
-    // Create nests (drop zones)
-    selectedTypes.forEach(dragonType => {
-        const nest = createNest(dragonType);
-        nestsArea.appendChild(nest);
-    });
-    
-    // Determine how many dragons to create
-    matchesNeeded = selectedTypes.length;
-    
-    // Create dragons
-    selectedTypes.forEach(dragonType => {
-        const dragon = createDragon(dragonType);
-        dragonStaging.appendChild(dragon);
-    });
-    
-    // Position elements
-    positionNestsRandomly();
-}
-
-// Function to position nests randomly
-function positionNestsRandomly() {
-    const nests = nestsArea.querySelectorAll('.nest');
-    
-    nests.forEach(nest => {
-        // Make position absolute for random positioning
-        nest.style.position = 'absolute';
-        const maxX = nestsArea.offsetWidth - nest.offsetWidth;
-        const maxY = nestsArea.offsetHeight - nest.offsetHeight;
-        
-        let randomX, randomY;
-        let validPosition = false;
-        
-        // Try to find a position that doesn't overlap with other nests
-        let attempts = 0;
-        while (!validPosition && attempts < 50) {
-            attempts++;
-            randomX = Math.max(0, Math.floor(Math.random() * maxX));
-            randomY = Math.max(0, Math.floor(Math.random() * maxY));
-            
-            validPosition = true;
-            
-            // Check for overlap with other positioned nests
-            nestsArea.querySelectorAll('.nest').forEach(otherNest => {
-                if (otherNest !== nest && otherNest.style.left) {
-                    const otherX = parseInt(otherNest.style.left);
-                    const otherY = parseInt(otherNest.style.top);
-                    
-                    // Calculate distance between centers
-                    const dx = (randomX + nest.offsetWidth/2) - (otherX + otherNest.offsetWidth/2);
-                    const dy = (randomY + nest.offsetHeight/2) - (otherY + otherNest.offsetHeight/2);
-                    const distance = Math.sqrt(dx*dx + dy*dy);
-                    
-                    // If too close, try again
-                    if (distance < 120) {
-                        validPosition = false;
-                    }
-                }
-            });
-        }
-        
-        nest.style.left = `${randomX}px`;
-        nest.style.top = `${randomY}px`;
-    });
-}
-
-// Function to level up
-function levelUp() {
-    level++;
-    document.getElementById('game-level').textContent = level;
-    dragonsMatched = 0;
-    
-    // Add bonus time
-    timer += 10;
-    document.getElementById('game-timer').textContent = timer;
-    
-    // Show level up message
-    const levelUpMsg = document.createElement('div');
-    levelUpMsg.textContent = `Level ${level}!`;
-    levelUpMsg.style.position = 'absolute';
-    levelUpMsg.style.top = '50%';
-    levelUpMsg.style.left = '50%';
-    levelUpMsg.style.transform = 'translate(-50%, -50%)';
-    levelUpMsg.style.backgroundColor = '#8b5cf6';
-    levelUpMsg.style.color = 'white';
-    levelUpMsg.style.padding = '20px 40px';
-    levelUpMsg.style.borderRadius = '8px';
-    levelUpMsg.style.fontSize = '24px';
-    levelUpMsg.style.fontWeight = 'bold';
-    levelUpMsg.style.zIndex = '100';
-    gameArea.appendChild(levelUpMsg);
-    
-    // Remove message after delay and set up next level
-    setTimeout(() => {
-        gameArea.removeChild(levelUpMsg);
-        setupLevel();
-    }, 1500);
-}
-
-// Function to end the game
-function endGame() {
-    clearInterval(gameInterval);
+// Function to reset the game
+function resetGame() {
     gameActive = false;
+    arenaScore = 0;
+    arenaLevel = 1;
+    arenaTimer = 0;
+    targetsHit = 0;
+    totalTargets = 0;
+    comboMultiplier = 1;
+    lives = maxLives;
     
-    // Show game over message
-    const gameOverMsg = document.createElement('div');
-    gameOverMsg.innerHTML = `
-        <h2>Game Over!</h2>
-        <p>Final Score: ${score}</p>
-        <p>Levels Completed: ${level - 1}</p>
-    `;
-    gameOverMsg.style.position = 'absolute';
-    gameOverMsg.style.top = '50%';
-    gameOverMsg.style.left = '50%';
-    gameOverMsg.style.transform = 'translate(-50%, -50%)';
-    gameOverMsg.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-    gameOverMsg.style.padding = '30px';
-    gameOverMsg.style.borderRadius = '8px';
-    gameOverMsg.style.textAlign = 'center';
-    gameOverMsg.style.boxShadow = '0 4px 20px rgba(0,0,0,0.2)';
-    gameOverMsg.style.zIndex = '100';
-    gameArea.appendChild(gameOverMsg);
+    // Reset skill stats
+    Object.keys(skillStats).forEach(skill => {
+        skillStats[skill] = { hits: 0, misses: 0, total: 0 };
+    });
     
-    // Re-enable start button
-    startButton.disabled = false;
-    startButton.style.backgroundColor = '#8b5cf6';
+    // Clear intervals
+    if (gameInterval) clearInterval(gameInterval);
+    if (targetSpawnInterval) clearInterval(targetSpawnInterval);
+    
+    // Clear arena
+    arenaContainer.innerHTML = '';
+    arenaContainer.appendChild(arenaBackground);
+    arenaContainer.appendChild(skillIndicator);
+    
+    // Reset button
+    startBtn.textContent = 'Start Training';
+    startBtn.disabled = false;
+    
+    updateDisplays();
 }
 
-// Add event listeners for game controls
-startButton.addEventListener('click', startGame);
-resetButton.addEventListener('click', function() {
-    // Stop any running game
-    clearInterval(gameInterval);
+// Function to cycle through skills
+function cycleSkill() {
+    currentSkillIndex = (currentSkillIndex + 1) % skillKeys.length;
+    currentSkill = skillKeys[currentSkillIndex];
     
-    // Reset everything
-    gameActive = false;
-    startButton.disabled = false;
-    startButton.style.backgroundColor = '#8b5cf6';
+    const skill = skillTypes[currentSkill];
+    skillBtn.textContent = `Skill: ${skill.name}`;
     
-    // Clear areas
-    dragonStaging.innerHTML = '';
-    nestsArea.innerHTML = '';
+    if (currentSkill === 'mix') {
+        skillIndicator.textContent = `${skill.emoji} ${skill.name.toUpperCase()} - ALL SKILLS`;
+    } else {
+        skillIndicator.textContent = `${skill.emoji} ${skill.name.toUpperCase()} TARGETS`;
+    }
     
-    // Reset displays
-    document.getElementById('game-score').textContent = '0';
-    document.getElementById('game-level').textContent = '1';
-    document.getElementById('game-timer').textContent = '60';
+    skillIndicator.className = `skill-indicator ${currentSkill}`;
     
-    // Remove any messages
-    const messages = gameArea.querySelectorAll('div:not(.nest):not(#dragon-staging):not(#nests-area)');
-    messages.forEach(msg => {
-        if (msg !== dragonStaging && msg !== nestsArea) {
-            gameArea.removeChild(msg);
-        }
-    });
-});
+    // Update spawn interval if game is active
+    if (gameActive && targetSpawnInterval) {
+        clearInterval(targetSpawnInterval);
+        const baseSpawnDelay = (currentSkill === 'textSelection' || currentSkill === 'mix') ? 6000 : 2000;
+        const levelReduction = (currentSkill === 'textSelection' || currentSkill === 'mix') ? 300 : 100;
+        targetSpawnInterval = setInterval(spawnTargets, baseSpawnDelay - (arenaLevel * levelReduction));
+    }
+}
 
-// Initial setup
-document.getElementById('game-score').textContent = '0';
-document.getElementById('game-level').textContent = '1';
-document.getElementById('game-timer').textContent = '60';
+// Event listeners
+startBtn.addEventListener('click', startGame);
+resetBtn.addEventListener('click', resetGame);
+skillBtn.addEventListener('click', cycleSkill);
+
+// Initialize
+updateDisplays();
     </script>
 </body>
 </html>
