@@ -2427,7 +2427,7 @@ let arenaScore = 0;
 let arenaLevel = 1;
 let arenaTimer = 0;
 let gameActive = false;
-let currentSkill = 'click';
+let currentSkill = 'mix';
 let targetsHit = 0;
 let totalTargets = 0;
 let comboMultiplier = 1;
@@ -2489,13 +2489,13 @@ controlsContainer.className = 'arena-controls';
 controlsContainer.innerHTML = `
     <button class="arena-btn primary" id="start-arena">Start Training</button>
     <button class="arena-btn secondary" id="reset-arena">Reset</button>
-    <button class="arena-btn secondary" id="skill-selector">Skill: Click</button>
+    <button class="arena-btn secondary" id="skill-selector">Skill: Mix Mode</button>
 `;
 
 // Create skill indicator
 const skillIndicator = document.createElement('div');
-skillIndicator.className = 'skill-indicator click';
-skillIndicator.textContent = 'CLICK TARGETS';
+skillIndicator.className = 'skill-indicator mix';
+skillIndicator.textContent = '🎲 MIX MODE - ALL SKILLS';
 arenaContainer.appendChild(skillIndicator);
 
 // Append to main container
@@ -2524,7 +2524,7 @@ const skillTypes = {
     mix: { name: 'Mix Mode', color: '#8e44ad', emoji: '🎲' }
 };
 
-let currentSkillIndex = 0;
+let currentSkillIndex = 6; // Set to mix mode (index 6)
 const skillKeys = Object.keys(skillTypes);
 
 // Function to create different types of targets
